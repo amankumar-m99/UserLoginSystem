@@ -16,7 +16,9 @@ public class AppConfig {
 	}
 
 	@Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
-        return builder.getAuthenticationManager();
-    }
+	//used in both but difference in implementation
+	//used in code with durgesh
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
+		return builder.getAuthenticationManager();
+	}
 }

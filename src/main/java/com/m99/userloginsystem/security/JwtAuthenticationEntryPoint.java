@@ -20,7 +20,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint{
 //		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "you are unauthorized");
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		PrintWriter writer = response.getWriter();
-		writer.println("Access Denied! You are unauthorized."+ authException.getMessage());
+		writer.println("Access Denied! You are unauthorized. "+ authException.getMessage());
 	}
 
 }
