@@ -2,6 +2,7 @@ package com.m99.userloginsystem.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +31,51 @@ public class UserService {
 	}
 
 	public User registerUser(User user) {
+		if(!isUserAvailable(user.getUsername(), LookupType.USERNAME)) {
+			throw new IllegalArgumentException("username already exists!");
+		}
+		if(!isUserAvailable(user.getEmail(), LookupType.EMAIL)) {
+			throw new IllegalArgumentException("email already exists!");
+		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		if(user.getRoles() == null || user.getRoles().size() == 0) {
+			Role role = roleDao.findByRoleName("user").get();
+			if(role!=null) {
+				Set<Role> roles = new HashSet<Role>();
+				roles.add(role);
+				user.setRoles(roles);
+			}
+		}
 		return userDao.save(user);
+	}
+
+	private boolean isUserAvailable(String key, LookupType lookupType) {
+		User user = null;
+		try {
+			switch (lookupType) {
+			case EMAIL:
+				user = userDao.findByEmail(key).get();
+				break;
+			case USERNAME:
+				user = userDao.findByUsername(key).get();
+				break;
+			}
+		} catch(NoSuchElementException e) {
+			return true;
+		}
+		if(user != null)
+			return false;
+		return true;
 	}
 
 	public void initRolesAndUsers() {
 		Role adminRole = new Role();
-		adminRole.setRoleName("Admin");
+		adminRole.setRoleName("admin");
 		adminRole.setRoleDescription("This role handles admin tasks");
 		roleDao.save(adminRole);
 
 		Role userRole = new Role();
-		userRole.setRoleName("User");
+		userRole.setRoleName("user");
 		userRole.setRoleDescription("This normal default user");
 		roleDao.save(userRole);
 
@@ -51,7 +85,7 @@ public class UserService {
 		userA.setUsername("admin");
 		userA.setEmail("admin@gmail.com");
 		userA.setPassword(passwordEncoder.encode("1234A"));
-		userA.setRole(setA);
+		userA.setRoles(setA);
 		userDao.save(userA);
 
 		Set<Role> setU = new HashSet<>();
@@ -60,7 +94,7 @@ public class UserService {
 		userU.setUsername("amankumar");
 		userU.setEmail("amankumar@gmail.com");
 		userU.setPassword(passwordEncoder.encode("1234U"));
-		userU.setRole(setU);
+		userU.setRoles(setU);
 		userDao.save(userU);
 	}
 }

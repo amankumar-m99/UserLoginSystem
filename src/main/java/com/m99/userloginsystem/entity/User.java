@@ -32,5 +32,5 @@ public class User {
 	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.MERGE)
 //	@JoinTable(name = "USER_ROLE")
 	@JoinTable(name = "USER_ROLE", joinColumns = {@JoinColumn(name="USER_ID")}, inverseJoinColumns = {@JoinColumn(name="ROLE_ID")})
-	private Set<Role> role;
+	private Set<Role> roles;
 }
