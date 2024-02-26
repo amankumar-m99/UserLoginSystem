@@ -48,6 +48,7 @@ public class WebSecurityConfiguration {
 //                .requestMatchers("/test").authenticated()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/register-user").permitAll()
+                .requestMatchers("/create-role").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

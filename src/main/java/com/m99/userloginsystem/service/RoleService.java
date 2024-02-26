@@ -1,5 +1,7 @@
 package com.m99.userloginsystem.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +16,9 @@ public class RoleService {
 
 	public Role createNewRole(Role role) {
 		return roleDao.save(role);
+	}
+
+	public List<Role> getAllRoles() {
+		return roleDao.findAll();
 	}
 }

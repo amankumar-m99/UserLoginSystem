@@ -28,19 +28,25 @@ public class JwtService implements UserDetailsService{
 	@Autowired
 	private UserDao userDao;
 
-//	@Autowired
-//	private JwtHelper jwtHelper;
-
-//	@Autowired
-//	private AuthenticationManager authenticationManager;
+	@Autowired
+	private JwtHelper jwtHelper;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
-		User user = userDao.findByEmail(username).get();
-		if(user == null) {
-			throw new UsernameNotFoundException("No user exists with "+ username);
+		try {
+			User user = userDao.findByEmail(username).get();
+			if(user == null) {
+				user = userDao.findByUsername(username).get();
+				if(user == null) {
+					throw new UsernameNotFoundException("No user exists with "+ username);
+				}
+			}
+			return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthorities(user));
 		}
-		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthorities(user));
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		throw new UsernameNotFoundException("No user exists with "+ username);
 	}
 
 	private Collection<? extends GrantedAuthority> getAuthorities(User user){
@@ -51,23 +57,25 @@ public class JwtService implements UserDetailsService{
 		return authorities;
 	}
 
-//	public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
-//		String userName = jwtRequest.getEmail();
-//		String password = jwtRequest.getPassword();
-//		authenticate(userName, password);
-//		final UserDetails userDetails = loadUserByUsername(userName);
-//		String generateToken = jwtHelper.generateToken(userDetails);
-//		User user = userDao.findByEmail(userName).get();
-//		return new JwtResponse(generateToken, user.getUsername());
-//	}
+	public JwtResponse createJwtToken(JwtRequest jwtRequest, AuthenticationManager authenticationManager) throws Exception {
+		String userName = jwtRequest.getEmail();
+		String password = jwtRequest.getPassword();
+		authenticate(userName, password, authenticationManager);
+		final UserDetails userDetails = loadUserByUsername(userName);
+		String generateToken = jwtHelper.generateToken(userDetails);
+		User user = userDao.findByEmail(userName).get();
+		return new JwtResponse(generateToken, user.getUsername());
+	}
 
-//	private void authenticate(String username, String password) throws Exception {
-//		try {
-//			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-//		}catch (DisabledException e) {
-//			throw new Exception("User is disabled");
-//		}catch (BadCredentialsException e) {
-//			throw new Exception("Bad credentials");
-//		}
-//	}
+	private void authenticate(String username, String password, AuthenticationManager authenticationManager) throws Exception {
+		try {
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		}catch (DisabledException e) {
+			throw new Exception("User is disabled");
+		}catch (BadCredentialsException e) {
+			throw new Exception("Bad credentials");
+		}catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
 }
