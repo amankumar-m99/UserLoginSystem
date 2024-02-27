@@ -1,0 +1,12 @@
+//JwtController ()
+/login
+/register
+-------------------
+//RoleController (/role)
+/role/create
+/role/all-roles
+--------------------
+//UserController ()
+/all-users
+/current-user
+--------------------
