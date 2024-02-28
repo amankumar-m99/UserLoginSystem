@@ -20,6 +20,5 @@ public class PasswordHistory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	private User user;
 	private Date date;
 }
