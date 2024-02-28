@@ -3,8 +3,10 @@ package com.m99.userloginsystem.service;
 import java.util.Date;
 import java.util.Properties;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.m99.userloginsystem.entity.Smtp;
 import com.m99.userloginsystem.entity.User;
 
 import jakarta.mail.Authenticator;
@@ -15,20 +17,24 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-@Component
+@Service
 public class MailSenderService {
+
+	@Autowired
+	private SmtpService smtpService;
 
 	private boolean sendEmail(String to, String from, String subject, String text) {
 		boolean flag = true;
+		Smtp smtpData = smtpService.getById(1);
 		Properties properties = new Properties();
 		//smtp properties
-		properties.put("mail.smtp.auth", true);
-		properties.put("mail.smtp.starttls.enable", true);
-		properties.put("mail.smtp.port", 587);
-		properties.put("mail.smtp.host", "smtp.gmail.com");
+		properties.put("mail.smtp.auth", smtpData.getAuth());
+		properties.put("mail.smtp.starttls.enable", smtpData.getStarttlsEnable());
+		properties.put("mail.smtp.port", smtpData.getPort());
+		properties.put("mail.smtp.host", smtpData.getHost());
 
-		String username = "m99programmer";
-		String password = "hkgovzdoupuygnqk";
+		String username = smtpData.getUsername();
+		String password = smtpData.getPassword();
 		//session
 		Session session = Session.getInstance(properties, new Authenticator() {
 			@Override

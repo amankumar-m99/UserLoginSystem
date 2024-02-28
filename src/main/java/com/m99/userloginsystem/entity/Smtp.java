@@ -1,7 +1,5 @@
 package com.m99.userloginsystem.entity;
 
-import java.util.Date;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,14 +10,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PasswordHistory {
+@Getter
+@Setter
+public class Smtp {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	private User user;
-	private Date date;
+	private int id;
+	private int port;
+	private String host;
+	private String username;
+	private String password;
+	private Boolean auth;
+	private Boolean starttlsEnable;
 }
