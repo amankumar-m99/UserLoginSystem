@@ -2,6 +2,7 @@ package com.m99.userloginsystem.customerror;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,6 +29,11 @@ public class CustomErrorHandler {
 	@ExceptionHandler(value = UsernameNotFoundException.class)
 	public ResponseEntity<UsernameNotFoundException> usernameNotFoundException(UsernameNotFoundException exception) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception);
+	}
+
+	@ExceptionHandler(value = AccessDeniedException.class)
+	public ResponseEntity<Exception> accessDeniedException(AccessDeniedException exception) {
+		return ResponseEntity.status(403).body(new AccessDeniedException(exception.getMessage()));
 	}
 
 	@ExceptionHandler(value = Exception.class)
