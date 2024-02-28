@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.service;
+package com.m99.userloginsystem.service.mail;
 
 import java.util.List;
 import java.util.NoSuchElementException;

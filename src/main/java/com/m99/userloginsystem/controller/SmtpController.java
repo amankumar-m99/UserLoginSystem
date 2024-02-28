@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.m99.userloginsystem.entity.Smtp;
-import com.m99.userloginsystem.service.SmtpService;
+import com.m99.userloginsystem.service.mail.SmtpService;
 
 @RestController
 @RequestMapping("/smtp")
@@ -26,8 +26,8 @@ public class SmtpController {
 	private SmtpService smtpService;
 
 	@PostMapping("/add")
-	public void add(@RequestBody Smtp smtp) {
-		smtpService.add(smtp);
+	public Smtp add(@RequestBody Smtp smtp) {
+		return smtpService.add(smtp);
 	}
 
 	@GetMapping("/get-all")
