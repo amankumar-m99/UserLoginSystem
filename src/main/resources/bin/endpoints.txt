@@ -1,12 +1,28 @@
-//JwtController ()
+=>JwtController ()
+
 /login
 /register
+
 -------------------
-//RoleController (/role)
+
+RoleController (/role)
+
 /role/create
 /role/all-roles
+
 --------------------
-//UserController ()
+
+=>UserController ()
+
 /all-users
 /current-user
+
+--------------------
+
+=>SmtpController (/smtp)
+
+/smtp/add
+/smtp/get-all
+/get/{id}
+
 --------------------
