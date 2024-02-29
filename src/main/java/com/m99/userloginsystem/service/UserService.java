@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.m99.userloginsystem.customexception.user.EmailAlreadyExistsException;
+import com.m99.userloginsystem.customexception.user.UserNameNotAvailableException;
 import com.m99.userloginsystem.dao.RoleDao;
 import com.m99.userloginsystem.dao.UserDao;
 import com.m99.userloginsystem.entity.Role;
@@ -31,11 +33,11 @@ public class UserService {
 	}
 
 	public User registerUser(User user) {
-		if(!isUserAvailable(user.getUsername(), LookupType.USERNAME)) {
-			throw new IllegalArgumentException("username already exists!");
+		if(!isUserAvailable(user.getUsername(), UserLookupType.USERNAME)) {
+			throw new UserNameNotAvailableException("username already exists!");
 		}
-		if(!isUserAvailable(user.getEmail(), LookupType.EMAIL)) {
-			throw new IllegalArgumentException("email already exists!");
+		if(!isUserAvailable(user.getEmail(), UserLookupType.EMAIL)) {
+			throw new EmailAlreadyExistsException("email already exists!");
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		if(user.getRoles() == null || user.getRoles().size() == 0) {
@@ -49,7 +51,7 @@ public class UserService {
 		return userDao.save(user);
 	}
 
-	private boolean isUserAvailable(String key, LookupType lookupType) {
+	private boolean isUserAvailable(String key, UserLookupType lookupType) {
 		User user = null;
 		try {
 			switch (lookupType) {

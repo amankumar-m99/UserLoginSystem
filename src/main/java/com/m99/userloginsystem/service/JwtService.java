@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -72,10 +74,12 @@ public class JwtService implements UserDetailsService{
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		}catch (DisabledException e) {
 			throw new Exception("User is disabled");
+		}catch (LockedException e) {
+			throw new Exception("Account is locked!");
 		}catch (BadCredentialsException e) {
 			throw new Exception("Bad credentials");
-		}catch (Exception e) {
-			throw new Exception(e.getMessage());
+		}catch (AuthenticationException e) {
+			throw new Exception("Can't be authenticated");
 		}
 	}
 }

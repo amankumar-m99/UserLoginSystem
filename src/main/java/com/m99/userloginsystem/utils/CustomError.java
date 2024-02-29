@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.customerror;
+package com.m99.userloginsystem.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
