@@ -21,6 +21,8 @@ public class EmailVerificationService {
 		EmailVerification emailVerification = accountActivationDao.findByVerificationCode(verificationCode).get();
 		if(emailVerification == null)
 			throw new NoSuchElementException("Invalid activation key!");
+		emailVerification.setIsExpired(true);
+		emailVerification.setIsUsed(true);
 		return emailVerification.getEmail();
 	}
 
