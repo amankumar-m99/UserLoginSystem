@@ -83,20 +83,40 @@ public class UserService {
 
 		Set<Role> setA = new HashSet<>();
 		setA.add(adminRole);
-		User userA = new User();
-		userA.setUsername("admin");
-		userA.setEmail("admin@gmail.com");
-		userA.setPassword(passwordEncoder.encode("1234A"));
-		userA.setRoles(setA);
+//		User userA = new User();
+//		userA.setUsername("admin");
+//		userA.setEmail("admin@gmail.com");
+//		userA.setPassword(passwordEncoder.encode("1234A"));
+//		userA.setRoles(setA);
+		User userA = User.builder()
+				.username("admin")
+				.email("admin@gmail.com")
+				.password("1234A")
+				.roles(setA)
+				.isLocked(false)
+				.isEnabled(false)
+				.isAccountExpired(false)
+				.isCredentialExpired(false)
+				.build();
 		userDao.save(userA);
 
 		Set<Role> setU = new HashSet<>();
 		setU.add(userRole);
-		User userU = new User();
-		userU.setUsername("amankumar");
-		userU.setEmail("amankumar@gmail.com");
-		userU.setPassword(passwordEncoder.encode("1234U"));
-		userU.setRoles(setU);
+//		User userU = new User();
+//		userU.setUsername("amankumar");
+//		userU.setEmail("amankumar@gmail.com");
+//		userU.setPassword(passwordEncoder.encode("1234U"));
+//		userU.setRoles(setU);
+		User userU = User.builder()
+				.username("aman")
+				.email("amankumar.m99@gmail.com")
+				.password("1234U")
+				.roles(setU)
+				.isLocked(false)
+				.isEnabled(false)
+				.isAccountExpired(false)
+				.isCredentialExpired(false)
+				.build();
 		userDao.save(userU);
 	}
 }
