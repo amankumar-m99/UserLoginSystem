@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.service.mail;
+package com.m99.userloginsystem.service.email;
 
 import java.util.List;
 

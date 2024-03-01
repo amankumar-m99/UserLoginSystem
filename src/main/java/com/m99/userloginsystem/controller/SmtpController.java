@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.m99.userloginsystem.entity.Smtp;
-import com.m99.userloginsystem.service.mail.SmtpService;
+import com.m99.userloginsystem.service.email.SmtpService;
 
 @RestController
 @RequestMapping("/smtp")

@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.m99.userloginsystem.entity.User;
-import com.m99.userloginsystem.model.EmailVerification;
+import com.m99.userloginsystem.model.EmailVerificationCode;
 import com.m99.userloginsystem.model.JwtRequest;
 import com.m99.userloginsystem.model.JwtResponse;
 import com.m99.userloginsystem.model.UserForm;
-import com.m99.userloginsystem.service.AccountActivationService;
 import com.m99.userloginsystem.service.JwtService;
 import com.m99.userloginsystem.service.UserService;
-import com.m99.userloginsystem.service.mail.MailSenderService;
+import com.m99.userloginsystem.service.email.EmailSenderService;
+import com.m99.userloginsystem.service.email.EmailVerificationService;
 
 @RestController
 @CrossOrigin
@@ -28,10 +28,7 @@ public class JwtController {
 	private UserService userService;
 
 	@Autowired
-	private AccountActivationService accountActivationService;
-
-	@Autowired
-	private MailSenderService mailSenderService;
+	private EmailVerificationService emailVerificationService;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -41,10 +38,10 @@ public class JwtController {
 		return userDetailsService.createJwtToken(jwtRequest, authenticationManager);
 	}
 
-	@PostMapping({"/verify"})
-	public boolean verifyEmail(@RequestBody EmailVerification emailVerification) throws Exception {
-		String verifyEmailKey = accountActivationService.verifyEmail(emailVerification);
-		return mailSenderService.sendActivationMail(emailVerification.getEmail(), verifyEmailKey);
+	@PostMapping({"/enable"})
+	public String enableUser(@RequestBody EmailVerificationCode emailVerificationCode) {
+		String email = emailVerificationService.activateUserByCode(emailVerificationCode.getCode());
+		return email;
 	}
 
 	@PostMapping({"/register"})
