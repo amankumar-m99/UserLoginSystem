@@ -48,16 +48,15 @@ public class UserService {
 
 	private User createUserFromUserForm(UserForm userForm) {
 		User user = User.builder()
-				.username("superadmin")
-				.email("superadmin@m99.com")
-				.password(passwordEncoder.encode("1234S"))
+				.username(userForm.getUsername())
+				.email(userForm.getEmail())
+				.password(passwordEncoder.encode(userForm.getPassword()))
 				.roles(getRolesFromIds(userForm.getRoles()))
 				.isLocked(false)
 				.isEnabled(true)
 				.isAccountExpired(false)
 				.isCredentialExpired(false)
 				.build();
-		user.setPassword(passwordEncoder.encode(userForm.getPassword()));
 		if(user.getRoles() == null || user.getRoles().size() == 0) {
 			Role role = roleDao.findByRoleName("user").get();
 			if(role!=null) {
@@ -102,11 +101,11 @@ public class UserService {
 	}
 
 	private void initRoles() {
-		Role superAdminRole = Role.builder().roleName("SUPERADMIN").roleDescription("The supreme admin").build();
+		Role superAdminRole = Role.builder().roleName("superadmin").roleDescription("The supreme admin").build();
 		roleDao.save(superAdminRole);
-		Role adminRole = Role.builder().roleName("ADMIN").roleDescription("The admin").build();
+		Role adminRole = Role.builder().roleName("admin").roleDescription("The admin").build();
 		roleDao.save(adminRole);
-		Role userRole = Role.builder().roleName("USER").roleDescription("The default user").build();
+		Role userRole = Role.builder().roleName("user").roleDescription("The default user").build();
 		roleDao.save(userRole);
 	}
 
@@ -134,35 +133,5 @@ public class UserService {
 				.roles(Arrays.asList(2).stream().collect(Collectors.toSet()))
 				.build();
 		userDao.save(createUserFromUserForm(userForm));
-	}
-
-	public void initRolesAndUsersOldStyle() {
-		Role adminRole = new Role();
-		adminRole.setRoleName("admin");
-		adminRole.setRoleDescription("This role handles admin tasks");
-		roleDao.save(adminRole);
-
-		Role userRole = new Role();
-		userRole.setRoleName("user");
-		userRole.setRoleDescription("This normal default user");
-		roleDao.save(userRole);
-
-		Set<Role> setA = new HashSet<>();
-		setA.add(adminRole);
-		User userA = new User();
-		userA.setUsername("admin");
-		userA.setEmail("admin@gmail.com");
-		userA.setPassword(passwordEncoder.encode("1234A"));
-		userA.setRoles(setA);
-		userDao.save(userA);
-
-		Set<Role> setU = new HashSet<>();
-		setU.add(userRole);
-		User userU = new User();
-		userU.setUsername("amankumar");
-		userU.setEmail("amankumar@gmail.com");
-		userU.setPassword(passwordEncoder.encode("1234U"));
-		userU.setRoles(setU);
-		userDao.save(userU);
 	}
 }
