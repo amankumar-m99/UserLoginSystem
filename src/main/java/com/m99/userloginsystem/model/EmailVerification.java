@@ -1,0 +1,15 @@
+package com.m99.userloginsystem.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
+public class EmailVerification {
+	private String email;
+}

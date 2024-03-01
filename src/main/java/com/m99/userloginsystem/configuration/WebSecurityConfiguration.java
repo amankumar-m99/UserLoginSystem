@@ -44,6 +44,7 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/register").permitAll()
+                .requestMatchers("/activate/**").permitAll()
                 .requestMatchers("/role/**").authenticated()
                 .anyRequest().authenticated()
                 .and().exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))

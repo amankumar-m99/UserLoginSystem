@@ -17,10 +17,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 
-public class Role {
+public class AccountActivation {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private String roleName;
-	private String roleDescription;
+	private long id;
+	private String activationKey;
+	private String email;
+
 }

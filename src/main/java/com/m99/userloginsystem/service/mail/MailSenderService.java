@@ -67,4 +67,8 @@ public class MailSenderService {
 		String contentText = "An login attempt was made with your account \""+to +"\" on "+date.toString() + ".";
 		return sendEmail(to, from, subject, contentText);
 	}
+
+	public boolean sendActivationMail(String email, String key) {
+		return sendEmail(email, "", "Activation Link", key);
+	}
 }
