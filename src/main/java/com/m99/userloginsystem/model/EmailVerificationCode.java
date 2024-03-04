@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class EmailVerification {
-	private String email;
+public class EmailVerificationCode {
+	private String code;
 }

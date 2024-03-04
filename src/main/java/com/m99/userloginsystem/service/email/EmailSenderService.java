@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.service.mail;
+package com.m99.userloginsystem.service.email;
 
 import java.util.Date;
 import java.util.Properties;
@@ -18,7 +18,7 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
 @Service
-public class MailSenderService {
+public class EmailSenderService {
 
 	@Autowired
 	private SmtpService smtpService;
@@ -68,7 +68,7 @@ public class MailSenderService {
 		return sendEmail(to, from, subject, contentText);
 	}
 
-	public boolean sendActivationMail(String email, String key) {
-		return sendEmail(email, "", "Activation Link", key);
+	public boolean sendEmailVerificationLink(String email, String verificationCode) {
+		return sendEmail(email, "", "Activation Link", verificationCode);
 	}
 }
