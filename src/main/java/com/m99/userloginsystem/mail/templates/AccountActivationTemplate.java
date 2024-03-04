@@ -1,14 +1,11 @@
 package com.m99.userloginsystem.mail.templates;
 
-import org.springframework.stereotype.Component;
-
 import lombok.AllArgsConstructor;
 
-@Component
 @AllArgsConstructor
 public class AccountActivationTemplate implements HtmlMailTemplate{
 
-	String recipientEmail;
+	private String recipientEmail;
 	private String link;
 
 	@Override

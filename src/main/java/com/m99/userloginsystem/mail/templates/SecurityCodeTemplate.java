@@ -1,11 +1,8 @@
 package com.m99.userloginsystem.mail.templates;
 
-import org.springframework.stereotype.Component;
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-@Component
 public class SecurityCodeTemplate implements HtmlMailTemplate {
 	private int securityCode;
 	private String recipientEmail;

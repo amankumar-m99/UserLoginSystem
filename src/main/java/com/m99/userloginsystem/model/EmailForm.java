@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class EmailVerificationForm {
+public class EmailForm {
 	private String email;
 }

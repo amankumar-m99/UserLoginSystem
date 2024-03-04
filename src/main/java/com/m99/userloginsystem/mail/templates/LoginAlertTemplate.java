@@ -1,8 +1,8 @@
 package com.m99.userloginsystem.mail.templates;
 
-import org.springframework.stereotype.Component;
+import lombok.AllArgsConstructor;
 
-@Component
+@AllArgsConstructor
 public class LoginAlertTemplate implements HtmlMailTemplate {
 
 	private String recipientEmail;
