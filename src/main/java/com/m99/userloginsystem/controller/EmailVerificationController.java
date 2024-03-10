@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.m99.userloginsystem.entity.EmailSecurityCode;
+import com.m99.userloginsystem.entity.EmailVerification;
 import com.m99.userloginsystem.model.EmailForm;
+import com.m99.userloginsystem.model.EmailSecurityCodeForm;
 import com.m99.userloginsystem.service.email.EmailSenderService;
 import com.m99.userloginsystem.service.email.EmailVerificationService;
 
@@ -22,20 +24,19 @@ public class EmailVerificationController {
 	private EmailVerificationService emailVerificationService;
 
 	@Autowired
-	private EmailSenderService mailSenderService;
+	private EmailSenderService emailSenderService;
 
 	@PostMapping("/security-code")
 	public void generateSecurityCodeForEmail(@RequestBody EmailForm emailForm) throws EmailException {
 		EmailSecurityCode emailSecurityCode = emailVerificationService.generateSecurityCodeForEmail(emailForm);
 		String email = emailSecurityCode.getEmail();
 		int securityCode = emailSecurityCode.getSecurityCode();
-		mailSenderService.sendSecurityCode(email, securityCode);
+		emailSenderService.sendSecurityCode(email, securityCode);
 	}
-//	@PostMapping("/verify-email")
-//	public void verifyEmailByCode(@RequestBody EmailForm emailForm) {
-//		EmailVerification emailToVerification = emailVerificationService.addEmailToVerificationList(EmailForm);
-//		String email = emailToVerification.getEmail();
-//		String verificationCode = emailToVerification.getVerificationCode();
-//		mailSenderService.sendEmailVerificationLink(email, verificationCode);
-//	}
+
+	@PostMapping("/verify-email")
+	public boolean verifyEmailByCode(@RequestBody EmailSecurityCodeForm emailSecurityCodeForm) {
+		boolean isVerified = emailVerificationService.verifySecurityCode(emailSecurityCodeForm);
+		return isVerified;
+	}
 }

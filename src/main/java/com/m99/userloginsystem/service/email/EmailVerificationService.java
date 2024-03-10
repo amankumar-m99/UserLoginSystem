@@ -7,11 +7,13 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.m99.userloginsystem.customexception.email.EmailNotFoundException;
 import com.m99.userloginsystem.dao.EmailSecurityCodeDao;
 import com.m99.userloginsystem.dao.EmailVerificationDao;
 import com.m99.userloginsystem.entity.EmailSecurityCode;
 import com.m99.userloginsystem.entity.EmailVerification;
 import com.m99.userloginsystem.model.EmailForm;
+import com.m99.userloginsystem.model.EmailSecurityCodeForm;
 import com.m99.userloginsystem.utils.OtpGenerator;
 
 @Service
@@ -20,6 +22,7 @@ public class EmailVerificationService {
 	@Autowired
 	private EmailVerificationDao emailVerificationDao;
 
+	@Autowired
 	private EmailSecurityCodeDao emailSecurityCodeDao;
 
 	public String activateUserByCode(String verificationCode) {
@@ -53,5 +56,17 @@ public class EmailVerificationService {
 				.isExpired(false)
 				.build();
 		return emailVerificationDao.save(emailVerification);
+	}
+
+	public boolean verifySecurityCode(EmailSecurityCodeForm emailSecurityCodeForm) {
+		String email = emailSecurityCodeForm.getEmail();
+		int securityCode = emailSecurityCodeForm.getSecurityCode();
+		EmailSecurityCode emailSecurityCode = emailSecurityCodeDao.findByEmail(email).orElseThrow(()->new EmailNotFoundException("No email as "+email));
+		if(emailSecurityCode.getSecurityCode() != securityCode)
+			return false;
+		emailSecurityCode.setIsExpired(true);
+		emailSecurityCode.setIsUsed(true);
+		emailSecurityCodeDao.save(emailSecurityCode);
+		return true;
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import com.m99.userloginsystem.customexception.email.EmailNotFoundException;
 import com.m99.userloginsystem.customexception.smtp.NoSuchSmtpException;
 import com.m99.userloginsystem.customexception.user.EmailAlreadyExistsException;
 import com.m99.userloginsystem.customexception.user.UserNameNotAvailableException;
@@ -28,6 +29,11 @@ public class CustomExceptionHandlerComponent {
 
 	@ExceptionHandler(value = EmailAlreadyExistsException.class)
 	public ResponseEntity<EmailAlreadyExistsException> handleUserNameNotAvailableException(EmailAlreadyExistsException exception) {
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(exception);
+	}
+
+	@ExceptionHandler(value = EmailNotFoundException.class)
+	public ResponseEntity<EmailNotFoundException> handleEmailNotFoundException(EmailNotFoundException exception) {
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(exception);
 	}
 

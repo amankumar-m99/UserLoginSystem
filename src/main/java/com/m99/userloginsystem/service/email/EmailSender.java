@@ -9,6 +9,7 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.m99.userloginsystem.entity.Smtp;
 
@@ -20,7 +21,8 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-@Component
+//@Component
+@Service
 public class EmailSender {
 
 	@Autowired
@@ -30,8 +32,8 @@ public class EmailSender {
 	private Session session;
 	private String username;
 
-	public EmailSender() {
-		smtpData = smtpService.getById(1);
+	private void initData() {
+		smtpData = this.smtpService.getById(1);
 		Properties smtpProperties = new Properties();
 		smtpProperties.put("mail.smtp.auth", smtpData.getAuth());
 		smtpProperties.put("mail.smtp.starttls.enable", smtpData.getStarttlsEnable());
@@ -48,9 +50,11 @@ public class EmailSender {
 	}
 
 	public void sendMail(String recipientEmail, String subject, String content, EmailContentType contentType) throws EmailException {
+		initData();
 		switch (contentType) {
 		case SIMPLE_TEXT:
-			sendTextMail(recipientEmail, subject, content);
+//			sendTextMail(recipientEmail, subject, content);
+			sendMail2(recipientEmail, subject, content);
 			break;
 		case HTML:
 			sendHtmlMail(recipientEmail, subject, content);
@@ -58,7 +62,7 @@ public class EmailSender {
 		}
 	}
 
-	public void sendTextMail(String recipientEmail, String subject, String content) throws EmailException {
+	private void sendTextMail(String recipientEmail, String subject, String content) throws EmailException {
 		Email email = new SimpleEmail();
 		email.setHostName(smtpData.getHost());
 		email.setSmtpPort(smtpData.getPort());
@@ -71,7 +75,7 @@ public class EmailSender {
 		email.send();
 	}
 
-	public void sendHtmlMail(String recipientEmail, String subject, String content) throws EmailException {
+	private void sendHtmlMail(String recipientEmail, String subject, String content) throws EmailException {
 		HtmlEmail email = new HtmlEmail();
 		email.setHostName(smtpData.getHost());
 		email.addTo(recipientEmail, recipientEmail);
@@ -83,7 +87,7 @@ public class EmailSender {
 		email.send();
 	}
 
-	public boolean sendMail2(String recipientEmail, String subject, String content, EmailContentType contentType) {
+	private boolean sendMail2(String recipientEmail, String subject, String content) {
 		boolean flag = true;
 		try {
 			Message message = new MimeMessage(session);

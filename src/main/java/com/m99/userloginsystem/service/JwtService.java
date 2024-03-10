@@ -28,7 +28,7 @@ public class JwtService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
-		User user = userDao.findByEmail(username).get();
+		User user = userDao.findByEmail(username).orElse(null);
 		if(user == null) {
 			user = userDao.findByUsername(username).get();
 			if(user == null) {

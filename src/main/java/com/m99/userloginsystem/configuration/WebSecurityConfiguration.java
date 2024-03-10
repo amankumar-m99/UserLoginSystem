@@ -45,7 +45,7 @@ public class WebSecurityConfiguration {
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/register").permitAll()
                 .requestMatchers("/enable").permitAll()
-                .requestMatchers("/verify-email").permitAll()
+                .requestMatchers("/email/**").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

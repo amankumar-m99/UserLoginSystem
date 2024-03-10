@@ -31,8 +31,9 @@ public class EmailSenderService {
 
 	public boolean sendSecurityCode(String email, int securityCode) throws EmailException {
 		SecurityCodeTemplate template = new SecurityCodeTemplate(securityCode, email);
-		String content = template.getHtmlContent();
-		emailSender.sendHtmlMail(email, "Security Code From M99", content);
+//		String content = template.getHtmlContent();
+		String content = template.getTextContent();
+		emailSender.sendMail(email, "Security Code From M99", content, EmailContentType.SIMPLE_TEXT);
 		return true;
 	}
 }

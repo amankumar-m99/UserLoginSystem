@@ -3,13 +3,15 @@ package com.m99.userloginsystem.service.email;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.m99.userloginsystem.customexception.smtp.NoSuchSmtpException;
 import com.m99.userloginsystem.dao.SmtpDao;
 import com.m99.userloginsystem.entity.Smtp;
 
-@Service
+//@Service
+@Component
 public class SmtpService {
 
 	@Autowired
