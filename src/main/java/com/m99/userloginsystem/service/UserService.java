@@ -11,16 +11,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.m99.userloginsystem.customexception.user.EmailAlreadyExistsException;
+import com.m99.userloginsystem.customexception.email.EmailAlreadyExistsException;
+import com.m99.userloginsystem.customexception.email.EmailNotVerifiedException;
 import com.m99.userloginsystem.customexception.user.UserNameNotAvailableException;
+import com.m99.userloginsystem.dao.EmailSecurityCodeDao;
 import com.m99.userloginsystem.dao.RoleDao;
 import com.m99.userloginsystem.dao.UserDao;
+import com.m99.userloginsystem.entity.EmailSecurityCode;
 import com.m99.userloginsystem.entity.Role;
 import com.m99.userloginsystem.entity.User;
 import com.m99.userloginsystem.model.UserForm;
 
 @Service
 public class UserService {
+
+	@Autowired
+	private EmailSecurityCodeDao emailSecurityCodeDao;
 
 	@Autowired
 	private UserDao userDao;
@@ -36,11 +42,19 @@ public class UserService {
 	}
 
 	public User registerUser(UserForm userForm) {
-		if(!isUserAvailable(userForm.getUsername(), UserLookupType.USERNAME)) {
-			throw new UserNameNotAvailableException("username already exists!");
-		}
 		if(!isUserAvailable(userForm.getEmail(), UserLookupType.EMAIL)) {
 			throw new EmailAlreadyExistsException("email already exists!");
+		}
+		EmailSecurityCode emailSecurityCode = emailSecurityCodeDao.findByEmail(userForm.getEmail()).orElse(null);
+		if(emailSecurityCode != null) {
+			if(!emailSecurityCode.getIsUsed())
+				throw new EmailNotVerifiedException("email "+userForm.getEmail()+" is not verified.");
+		}
+		else {
+			throw new EmailNotVerifiedException("email "+userForm.getEmail()+" is not verified.");
+		}
+		if(!isUserAvailable(userForm.getUsername(), UserLookupType.USERNAME)) {
+			throw new UserNameNotAvailableException("username already exists!");
 		}
 		User user = createUserFromUserForm(userForm);
 		return userDao.save(user);

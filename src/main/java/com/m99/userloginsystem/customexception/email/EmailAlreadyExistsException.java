@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.customexception.user;
+package com.m99.userloginsystem.customexception.email;
 
 public class EmailAlreadyExistsException extends RuntimeException{
 
