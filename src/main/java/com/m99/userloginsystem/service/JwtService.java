@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.m99.userloginsystem.dao.UserDao;
-import com.m99.userloginsystem.entity.User;
+import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.model.JwtRequest;
 import com.m99.userloginsystem.model.JwtResponse;
 import com.m99.userloginsystem.security.JwtHelper;

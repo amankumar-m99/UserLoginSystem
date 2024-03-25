@@ -43,7 +43,7 @@ public class WebSecurityConfiguration {
 		httpSecurity.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests()
                 .requestMatchers("/login").permitAll()
-                .requestMatchers("/register").permitAll()
+                .requestMatchers("/register/**").permitAll()
                 .requestMatchers("/enable").permitAll()
                 .requestMatchers("/email/**").permitAll()
                 .anyRequest().authenticated()

@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.m99.userloginsystem.entity.User;
+import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.service.UserService;
 
 import jakarta.annotation.PostConstruct;

@@ -19,7 +19,7 @@ import com.m99.userloginsystem.dao.RoleDao;
 import com.m99.userloginsystem.dao.UserDao;
 import com.m99.userloginsystem.entity.EmailSecurityCode;
 import com.m99.userloginsystem.entity.Role;
-import com.m99.userloginsystem.entity.User;
+import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.model.UserForm;
 
 @Service

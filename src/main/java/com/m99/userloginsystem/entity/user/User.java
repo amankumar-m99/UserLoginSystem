@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.entity;
+package com.m99.userloginsystem.entity.user;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -7,6 +7,8 @@ import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.m99.userloginsystem.entity.Role;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -17,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +47,10 @@ public class User implements UserDetails {
 	private Boolean isEnabled;
 	private Boolean isAccountExpired;
 	private Boolean isCredentialExpired;
+	@OneToOne
+	private UserPersonalDetails personalDetails;
+	@OneToOne
+	private UserSecurityDetails securityDetails;
 
 	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.MERGE)
 //	@JoinTable(name = "USER_ROLE")

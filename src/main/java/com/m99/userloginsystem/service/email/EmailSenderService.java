@@ -6,7 +6,7 @@ import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.m99.userloginsystem.entity.User;
+import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.mail.templates.SecurityCodeTemplate;
 
 @Service
