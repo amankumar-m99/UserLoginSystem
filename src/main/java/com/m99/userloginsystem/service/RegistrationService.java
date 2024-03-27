@@ -31,8 +31,8 @@ public class RegistrationService {
 		}
 		User user = userDao.findByEmail(email).orElse(null);
 		if(user!=null)
-			return false;
-		return true;
+			return true;
+		return false;
 	}
 
 	public boolean hasEmailBeenInUse(String email) {
