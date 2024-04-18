@@ -41,6 +41,11 @@ public class UserService {
 		return userDao.findAll();
 	}
 
+	public User getUserByUsername(String username) {
+		User user = userDao.findByUsername(username).orElse(null);
+		return user;
+	}
+
 	public User registerUser(UserForm userForm) {
 		if(!isUserAvailable(userForm.getEmail(), UserLookupType.EMAIL)) {
 			throw new EmailAlreadyExistsException("email already exists!");

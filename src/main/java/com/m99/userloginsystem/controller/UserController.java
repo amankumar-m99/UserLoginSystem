@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.m99.userloginsystem.entity.user.User;
@@ -35,5 +36,10 @@ public class UserController {
 	@GetMapping({"/current-user"})
 	public String getCurrentUser(Principal principal) {
 		return principal.getName();
+	}
+
+	@GetMapping({"/user-info/{username}"})
+	public User getUserInfo(@RequestParam String username) {
+		return this.userService.getUserByUsername(username);
 	}
 }
