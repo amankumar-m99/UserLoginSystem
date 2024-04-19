@@ -50,6 +50,7 @@ public class WebSecurityConfiguration {
                 .and().exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+		httpSecurity.cors(); // to accept cross origin auth requests
         return httpSecurity.build();
     }
 

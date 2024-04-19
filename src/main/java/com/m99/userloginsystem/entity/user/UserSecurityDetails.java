@@ -24,7 +24,7 @@ public class UserSecurityDetails {
 	private String recoveryPhoneNumber;
 	private String securityQuestion;
 	private String securityAnswer;
-	private boolean loginAlert;
-	private boolean passwordUpdateAlert;
-	private boolean twoStepLogin;
+	private Boolean loginAlert;
+	private Boolean passwordUpdateAlert;
+	private Boolean twoStepLogin;
 }
