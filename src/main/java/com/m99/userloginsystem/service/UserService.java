@@ -1,6 +1,7 @@
 package com.m99.userloginsystem.service;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,11 +17,16 @@ import com.m99.userloginsystem.customexception.email.EmailNotVerifiedException;
 import com.m99.userloginsystem.customexception.user.UserNameNotAvailableException;
 import com.m99.userloginsystem.dao.EmailSecurityCodeDao;
 import com.m99.userloginsystem.dao.RoleDao;
-import com.m99.userloginsystem.dao.UserDao;
+import com.m99.userloginsystem.dao.user.UserDao;
+import com.m99.userloginsystem.dao.user.UserPersonalDetailsDao;
+import com.m99.userloginsystem.dao.user.UserSecurityDetailsDao;
 import com.m99.userloginsystem.entity.EmailSecurityCode;
 import com.m99.userloginsystem.entity.Role;
 import com.m99.userloginsystem.entity.user.User;
+import com.m99.userloginsystem.entity.user.UserPersonalDetails;
+import com.m99.userloginsystem.entity.user.UserSecurityDetails;
 import com.m99.userloginsystem.model.UserForm;
+import com.m99.userloginsystem.utils.enums.Gender;
 
 @Service
 public class UserService {
@@ -30,6 +36,12 @@ public class UserService {
 
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private UserPersonalDetailsDao userPersonalDetailsDao;
+
+	@Autowired
+	private UserSecurityDetailsDao userSecurityDetailsDao;
 
 	@Autowired
 	private RoleDao roleDao;
@@ -43,6 +55,11 @@ public class UserService {
 
 	public User getUserByUsername(String username) {
 		User user = userDao.findByUsername(username).orElse(null);
+		return user;
+	}
+
+	public User getUserById(long id) {
+		User user = userDao.findById(id).orElse(null);
 		return user;
 	}
 
@@ -66,6 +83,26 @@ public class UserService {
 	}
 
 	private User createUserFromUserForm(UserForm userForm) {
+		UserPersonalDetails personalDetails = UserPersonalDetails.builder()
+				.firstName("N/A")
+				.middleName("N/A")
+				.lastName("N/A")
+				.phoneNumber("9876543210")
+				.gender(Gender.MALE)
+				.country("India")
+				.dateOfBirth(new Date())
+				.build();
+		personalDetails = userPersonalDetailsDao.save(personalDetails);
+		UserSecurityDetails securityDetails = UserSecurityDetails.builder()
+				.recoveryEmail("N/A")
+				.recoveryPhoneNumber("N/A")
+				.securityQuestion("N/A")
+				.securityAnswer("N/A")
+				.loginAlert(true)
+				.passwordUpdateAlert(true)
+				.twoStepLogin(true)
+				.build();
+		securityDetails = userSecurityDetailsDao.save(securityDetails);
 		User user = User.builder()
 				.username(userForm.getUsername())
 				.email(userForm.getEmail())
@@ -75,6 +112,8 @@ public class UserService {
 				.isEnabled(true)
 				.isAccountExpired(false)
 				.isCredentialExpired(false)
+				.personalDetails(personalDetails)
+				.securityDetails(securityDetails)
 				.build();
 		if(user.getRoles() == null || user.getRoles().size() == 0) {
 			Role role = roleDao.findByRoleName("user").get();
@@ -149,7 +188,7 @@ public class UserService {
 				.username("amank")
 				.email("amankumar@m99.com")
 				.password("1234U")
-				.roles(Arrays.asList(2).stream().collect(Collectors.toSet()))
+				.roles(Arrays.asList(3).stream().collect(Collectors.toSet()))
 				.build();
 		userDao.save(createUserFromUserForm(userForm));
 	}

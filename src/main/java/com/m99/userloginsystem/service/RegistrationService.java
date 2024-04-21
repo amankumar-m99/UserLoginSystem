@@ -3,7 +3,7 @@ package com.m99.userloginsystem.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.m99.userloginsystem.dao.UserDao;
+import com.m99.userloginsystem.dao.user.UserDao;
 import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.utils.Validator;
 

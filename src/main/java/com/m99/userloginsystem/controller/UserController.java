@@ -2,6 +2,7 @@ package com.m99.userloginsystem.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,8 +41,13 @@ public class UserController {
 		return principal.getName();
 	}
 
-	@GetMapping({"/user-info/{username}"})
-	public User getUserInfo(@PathVariable String username) {
-		return this.userService.getUserByUsername(username);
+	@GetMapping({"/user-info/{userIdStr}"})
+	public User getUserInfo(@PathVariable String userIdStr) {
+		try {
+			long userId = Long.parseLong(userIdStr);
+			return this.userService.getUserById(userId);
+		}catch (Exception e) {
+			throw new NoSuchElementException("No user with id "+ userIdStr);
+		}
 	}
 }

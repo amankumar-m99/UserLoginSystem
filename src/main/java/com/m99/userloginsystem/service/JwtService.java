@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.m99.userloginsystem.dao.UserDao;
+import com.m99.userloginsystem.dao.user.UserDao;
 import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.model.JwtRequest;
 import com.m99.userloginsystem.model.JwtResponse;
@@ -26,6 +26,17 @@ public class JwtService implements UserDetailsService{
 	@Autowired
 	private JwtHelper jwtHelper;
 
+	public JwtResponse createJwtToken(JwtRequest jwtRequest, AuthenticationManager authenticationManager) throws Exception {
+		String userName = jwtRequest.getEmail();
+		String password = jwtRequest.getPassword();
+		authenticate(userName, password, authenticationManager);
+		final UserDetails userDetails = loadUserByUsername(userName);
+		String generateToken = jwtHelper.generateToken(userDetails);
+//		User user = userDao.findByEmail(userName).get();
+		User user = (User) userDetails;
+		return new JwtResponse(generateToken, user.getId());
+	}
+
 	@Override
 	public UserDetails loadUserByUsername(String username) {
 		User user = userDao.findByEmail(username).orElse(null);
@@ -36,16 +47,6 @@ public class JwtService implements UserDetailsService{
 			}
 		}
 		return user;
-	}
-
-	public JwtResponse createJwtToken(JwtRequest jwtRequest, AuthenticationManager authenticationManager) throws Exception {
-		String userName = jwtRequest.getEmail();
-		String password = jwtRequest.getPassword();
-		authenticate(userName, password, authenticationManager);
-		final UserDetails userDetails = loadUserByUsername(userName);
-		String generateToken = jwtHelper.generateToken(userDetails);
-		User user = userDao.findByEmail(userName).get();
-		return new JwtResponse(generateToken, user.getUsername());
 	}
 
 	private void authenticate(String username, String password, AuthenticationManager authenticationManager) {
