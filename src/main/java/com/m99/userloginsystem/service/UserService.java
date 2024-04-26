@@ -171,7 +171,7 @@ public class UserService {
 		UserForm superAdminUserForm = UserForm.builder()
 				.username("superAdmin")
 				.email("superadmin@m99.com")
-				.password("1234S")
+				.password("1234")
 				.roles(Arrays.asList(1).stream().collect(Collectors.toSet()))
 				.build();
 		userDao.save(createUserFromUserForm(superAdminUserForm));
@@ -179,7 +179,7 @@ public class UserService {
 		UserForm adminUserForm = UserForm.builder()
 				.username("admin")
 				.email("admin@m99.com")
-				.password("1234A")
+				.password("1234")
 				.roles(Arrays.asList(2).stream().collect(Collectors.toSet()))
 				.build();
 		userDao.save(createUserFromUserForm(adminUserForm));
@@ -187,7 +187,7 @@ public class UserService {
 		UserForm userForm = UserForm.builder()
 				.username("amank")
 				.email("amankumar@m99.com")
-				.password("1234U")
+				.password("1234")
 				.roles(Arrays.asList(3).stream().collect(Collectors.toSet()))
 				.build();
 		userDao.save(createUserFromUserForm(userForm));

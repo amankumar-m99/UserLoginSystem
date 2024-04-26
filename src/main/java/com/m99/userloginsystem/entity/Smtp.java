@@ -18,10 +18,11 @@ public class Smtp {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private int port;
-	private String host;
 	private String username;
 	private String password;
+	private String host;
+	private int port;
 	private Boolean auth;
 	private Boolean starttlsEnable;
+	private Boolean isSelected;
 }
