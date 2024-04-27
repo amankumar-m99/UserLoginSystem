@@ -8,10 +8,10 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.m99.userloginsystem.entity.Smtp;
+import com.m99.userloginsystem.entity.smtp.Smtp;
+import com.m99.userloginsystem.service.smtp.SmtpService;
 
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;

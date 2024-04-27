@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.m99.userloginsystem.customexception.email.EmailNotFoundException;
-import com.m99.userloginsystem.dao.EmailSecurityCodeDao;
-import com.m99.userloginsystem.dao.EmailVerificationDao;
-import com.m99.userloginsystem.entity.EmailSecurityCode;
-import com.m99.userloginsystem.entity.EmailVerification;
-import com.m99.userloginsystem.model.EmailForm;
+import com.m99.userloginsystem.dao.security.EmailSecurityCodeDao;
+import com.m99.userloginsystem.dao.security.EmailVerificationDao;
+import com.m99.userloginsystem.entity.security.EmailSecurityCode;
+import com.m99.userloginsystem.entity.security.EmailVerification;
 import com.m99.userloginsystem.model.EmailSecurityCodeForm;
+import com.m99.userloginsystem.model.email.EmailForm;
 import com.m99.userloginsystem.utils.OtpGenerator;
 
 @Service

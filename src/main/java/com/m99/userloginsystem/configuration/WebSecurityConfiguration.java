@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.m99.userloginsystem.security.JwtAuthenticationEntryPoint;
 import com.m99.userloginsystem.security.JwtAuthenticationFilter;
-import com.m99.userloginsystem.service.JwtService;
+import com.m99.userloginsystem.service.jwt.JwtService;
 
 @Configuration
 @EnableWebMvc //for custom errors
