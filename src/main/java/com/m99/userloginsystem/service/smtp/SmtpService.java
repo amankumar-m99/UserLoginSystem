@@ -17,6 +17,8 @@ public class SmtpService {
 	private SmtpDao smtpDao;
 
 	public Smtp add(Smtp smtp) {
+		if(smtp.getIsSelected())
+			smtpDao.markAllUnSelected();
 		return smtpDao.save(smtp);
 	}
 
@@ -24,12 +26,17 @@ public class SmtpService {
 		return smtpDao.save(smtp);
 	}
 
-	public Smtp getById(int id) throws NoSuchSmtpException {
+	public Smtp getById(long id) throws NoSuchSmtpException {
 		return smtpDao.findById(id).orElseThrow(()->new NoSuchSmtpException("No smtp exists with id "+ id));
 	}
 
 	public List<Smtp> getAllSmtp(){
 		return smtpDao.findAll();
+	}
+
+	public void markSelected(long id) {
+		smtpDao.markAllUnSelected();
+		smtpDao.markSelected(id);
 	}
 
 	public Smtp deleteById(int id) throws NoSuchSmtpException {

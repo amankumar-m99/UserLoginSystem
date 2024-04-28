@@ -48,6 +48,12 @@ public class SmtpController {
 		return smtpService.getById(id);
 	}
 
+	@PutMapping("/mark-selected")
+	@PatchMapping("/mark-selected")
+	public void markSelected(@RequestBody Smtp smtp){
+		smtpService.markSelected(smtp.getId());
+	}
+
 	@DeleteMapping("/delete/{id}")
 	public Smtp deleteSmtp(@RequestParam int id){
 		return smtpService.deleteById(id);
