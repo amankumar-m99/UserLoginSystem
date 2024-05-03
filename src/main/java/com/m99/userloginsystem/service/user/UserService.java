@@ -1,8 +1,7 @@
 package com.m99.userloginsystem.service.user;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,22 +13,22 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.imageio.ImageIO;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.m99.userloginsystem.configuration.data.StaticData;
 import com.m99.userloginsystem.customexception.email.EmailAlreadyExistsException;
 import com.m99.userloginsystem.customexception.email.EmailNotVerifiedException;
 import com.m99.userloginsystem.customexception.user.UserNameNotAvailableException;
+import com.m99.userloginsystem.dao.profilepic.ProfilePicDao;
 import com.m99.userloginsystem.dao.role.RoleDao;
 import com.m99.userloginsystem.dao.security.EmailSecurityCodeDao;
 import com.m99.userloginsystem.dao.user.UserDao;
 import com.m99.userloginsystem.dao.user.UserPersonalDetailsDao;
 import com.m99.userloginsystem.dao.user.UserSecurityDetailsDao;
+import com.m99.userloginsystem.entity.profilepic.ProfilePic;
 import com.m99.userloginsystem.entity.role.Role;
 import com.m99.userloginsystem.entity.security.EmailSecurityCode;
 import com.m99.userloginsystem.entity.user.User;
@@ -41,11 +40,11 @@ import com.m99.userloginsystem.utils.enums.Gender;
 @Service
 public class UserService {
 
-	@Value("${application.data.directory.home}")
-	private String dataDirectoryHome;
-
 	@Autowired
 	private EmailSecurityCodeDao emailSecurityCodeDao;
+
+	@Autowired
+	private ProfilePicDao profilePicDao;
 
 	@Autowired
 	private UserDao userDao;
@@ -95,43 +94,40 @@ public class UserService {
 		return userDao.save(user);
 	}
 
-	public String saveUserProfilePic(MultipartFile multipartFile) {
-		String applicationDataDirectory = dataDirectoryHome.replace(".", File.separator);
-		System.out.println(applicationDataDirectory);
-		String targetDirectory = applicationDataDirectory + File.separator + "profile_pics";
-		File file = new File(targetDirectory);
+	public String saveUserProfilePic(long id, MultipartFile multipartFile) {
+		String applicationDataDirectory = StaticData.getApplicationDataDirectory();
+		String profilePicsDirectory = applicationDataDirectory + File.separator + "ProfilePics";
+		File file = new File(profilePicsDirectory);
 		if(!file.exists())
 			file.mkdirs();
-		
 		try {
+			String targetFileName = id+"_"+multipartFile.getOriginalFilename();
 			InputStream inputStream = multipartFile.getInputStream();
 			byte data[] = new byte[inputStream.available()];
 			inputStream.read(data);
-			FileOutputStream fileOutputStream = new FileOutputStream(targetDirectory+File.separator+multipartFile.getOriginalFilename());
+			FileOutputStream fileOutputStream = new FileOutputStream(profilePicsDirectory+File.separator+ targetFileName);
 			fileOutputStream.write(data);
 			fileOutputStream.flush();
 			fileOutputStream.close();
+			ProfilePic profilePic = ProfilePic.builder().userId(id).imageName(targetFileName).location(profilePicsDirectory).build();
+			profilePicDao.save(profilePic);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		return multipartFile.getOriginalFilename();
+		return "/images/profile-pic/"+id;
 	}
 
-	public byte[] getUserProfilePic(String imageName) {
-		String applicationDataDirectory = dataDirectoryHome.replace(".", File.separator);
-		String targetDirectory = applicationDataDirectory + File.separator + "profile_pics";
-		String targetFile = targetDirectory + File.separator + imageName;
-		File file = new File(targetFile);
+	public InputStream getUserProfilePicResourceStream(long id) {
+		ProfilePic profilePic = profilePicDao.findByUserId(id).orElse(null);
+		if(profilePic==null)
+			return null;
+		String profilePicsDirectory = profilePic.getLocation()+ File.separator + profilePic.getImageName();
+		File file = new File(profilePicsDirectory);
 		if(!file.exists())
 			return null;
-		BufferedImage bImage;
 		try {
-			bImage = ImageIO.read(file);
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			ImageIO.write(bImage, "jpg", bos );
-			byte [] data = bos.toByteArray();
-			return data;
+			InputStream inputStream = new FileInputStream(file);
+			return inputStream;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -48,27 +48,17 @@ public class UserController {
 	}
 
 	@PostMapping({"/profile-pic"})
-	public ResponseEntity<ProfilePicResponse> saveUserProfilePic(@RequestParam("file") MultipartFile multipartFile) {
-		String baseUrl = "profile-pic/";
-		String result = this.userService.saveUserProfilePic(multipartFile);
+	@CrossOrigin
+	public ResponseEntity<ProfilePicResponse> saveUserProfilePic(@RequestParam("id") String idStr, @RequestParam("file") MultipartFile multipartFile) {
+		long id = Long.parseLong(idStr);
+		System.out.println("In controller Saving "+ multipartFile.getOriginalFilename() + " by "+ id);
+		String result = this.userService.saveUserProfilePic(id, multipartFile);
 		ResponseEntity<ProfilePicResponse> response;
 		if(result != null && !result.trim().isEmpty())
-			response = new ResponseEntity<>(ProfilePicResponse.builder().response(baseUrl+result).build(), HttpStatus.OK);
+			response = new ResponseEntity<>(ProfilePicResponse.builder().response(result).build(), HttpStatus.OK);
 		else
-			response = new ResponseEntity<>(ProfilePicResponse.builder().response("").build(), HttpStatus.INTERNAL_SERVER_ERROR);
+			response = new ResponseEntity<>(ProfilePicResponse.builder().response("error").build(), HttpStatus.INTERNAL_SERVER_ERROR);
 		return response;
-	}
-
-	@GetMapping({"/profile-pic/{imageName}"})
-	public ResponseEntity<byte[]> getUserProfilePic(@PathVariable String imageName) {
-		byte[] data = this.userService.getUserProfilePic(imageName);
-		HttpStatus status;
-//		if(file != null)
-//			status = HttpStatus.OK;
-//		else
-//			status = HttpStatus.NO_CONTENT;
-		return ResponseEntity.ok().body(data);
-//		return new ResponseEntity<>(file, status);
 	}
 
 	@GetMapping({"/user-info/{userIdStr}"})
