@@ -21,7 +21,6 @@ import com.m99.userloginsystem.model.user.ProfilePicResponse;
 import com.m99.userloginsystem.service.user.UserService;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.mail.Multipart;
 
 @RestController
 @CrossOrigin
@@ -49,12 +48,27 @@ public class UserController {
 	}
 
 	@PostMapping({"/profile-pic"})
-	public ResponseEntity<ProfilePicResponse> saveUserProfilePic(@RequestParam("file") MultipartFile file) {
-		System.out.println(file.getOriginalFilename());
-//		ResponseEntity<Strin>
-//		return file.getOriginalFilename();
-		ProfilePicResponse response = ProfilePicResponse.builder().response("Received "+ file.getOriginalFilename()).build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
+	public ResponseEntity<ProfilePicResponse> saveUserProfilePic(@RequestParam("file") MultipartFile multipartFile) {
+		String baseUrl = "profile-pic/";
+		String result = this.userService.saveUserProfilePic(multipartFile);
+		ResponseEntity<ProfilePicResponse> response;
+		if(result != null && !result.trim().isEmpty())
+			response = new ResponseEntity<>(ProfilePicResponse.builder().response(baseUrl+result).build(), HttpStatus.OK);
+		else
+			response = new ResponseEntity<>(ProfilePicResponse.builder().response("").build(), HttpStatus.INTERNAL_SERVER_ERROR);
+		return response;
+	}
+
+	@GetMapping({"/profile-pic/{imageName}"})
+	public ResponseEntity<byte[]> getUserProfilePic(@PathVariable String imageName) {
+		byte[] data = this.userService.getUserProfilePic(imageName);
+		HttpStatus status;
+//		if(file != null)
+//			status = HttpStatus.OK;
+//		else
+//			status = HttpStatus.NO_CONTENT;
+		return ResponseEntity.ok().body(data);
+//		return new ResponseEntity<>(file, status);
 	}
 
 	@GetMapping({"/user-info/{userIdStr}"})
