@@ -1,7 +1,6 @@
 package com.m99.userloginsystem.service.user;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.m99.userloginsystem.configuration.data.StaticData;
 import com.m99.userloginsystem.customexception.email.EmailAlreadyExistsException;
 import com.m99.userloginsystem.customexception.email.EmailNotVerifiedException;
+import com.m99.userloginsystem.customexception.images.ImageResourceNotFoundException;
 import com.m99.userloginsystem.customexception.user.UserNameNotAvailableException;
 import com.m99.userloginsystem.dao.profilepic.ProfilePicDao;
 import com.m99.userloginsystem.dao.role.RoleDao;
@@ -34,6 +34,7 @@ import com.m99.userloginsystem.entity.security.EmailSecurityCode;
 import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.entity.user.UserPersonalDetails;
 import com.m99.userloginsystem.entity.user.UserSecurityDetails;
+import com.m99.userloginsystem.entity.user.profilepic.UserProfilePicResource;
 import com.m99.userloginsystem.model.user.UserForm;
 import com.m99.userloginsystem.utils.enums.Gender;
 
@@ -117,21 +118,15 @@ public class UserService {
 		return "/images/profile-pic/"+id;
 	}
 
-	public InputStream getUserProfilePicResourceStream(long id) {
+	public UserProfilePicResource getUserProfilePicResource(long id) throws ImageResourceNotFoundException {
 		ProfilePic profilePic = profilePicDao.findByUserId(id).orElse(null);
 		if(profilePic==null)
-			return null;
+			throw new ImageResourceNotFoundException("no resource found for this account");
 		String profilePicsDirectory = profilePic.getLocation()+ File.separator + profilePic.getImageName();
 		File file = new File(profilePicsDirectory);
 		if(!file.exists())
-			return null;
-		try {
-			InputStream inputStream = new FileInputStream(file);
-			return inputStream;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+			throw new ImageResourceNotFoundException("no resource found for this account");
+		return new UserProfilePicResource(file);
 	}
 
 	private User createUserFromUserForm(UserForm userForm) {
