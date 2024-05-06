@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.m99.userloginsystem.configuration.data.StaticData;
+import com.m99.userloginsystem.customexception.datadirectorypolicy.InvalidDataDirectoryPolicyException;
 
 import jakarta.annotation.PostConstruct;
 
@@ -20,6 +21,9 @@ public class AppConfig {
 	@Value("${application.data.directory.home}")
 	private String dataDirectoryHome;
 
+	@Value("${application.data.directory.policy}")
+	private String dataDirectoryPolicy;
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -28,11 +32,22 @@ public class AppConfig {
 	@PostConstruct()
 	public void initApplicationDataDirectory() {
 		System.out.println("-> Initialising dataDirectory...");
+		ApplicationDataDirectoryPolicy policy = getApplicationDataDirectoryPolicyFromString(dataDirectoryPolicy);
 		if(dataDirectoryHome == null || dataDirectoryHome.trim().isEmpty())
-			StaticData.setApplicationDataDirectoryParent(System.getProperty("user.dir"));
+			StaticData.setApplicationDataDirectoryParent(System.getProperty("user.dir"), policy);
 		else
-			StaticData.setApplicationDataDirectoryParent(dataDirectoryHome.replace(".", File.separator));
+			StaticData.setApplicationDataDirectoryParent(dataDirectoryHome.replace(".", File.separator), policy);
 		System.out.println("-> Initialed dataDirectory to "+ StaticData.getApplicationDataDirectory());
+	}
+
+	public ApplicationDataDirectoryPolicy getApplicationDataDirectoryPolicyFromString(String policyStr) {
+		if(policyStr.toLowerCase().equals("create")) {
+			return ApplicationDataDirectoryPolicy.CREATE;
+		}
+		else if(policyStr.toLowerCase().equals("update")) {
+			return ApplicationDataDirectoryPolicy.UPDATE;
+		}
+		throw new InvalidDataDirectoryPolicyException("In application.properties, '"+policyStr+"' is not a valid policy");
 	}
 
 	@Bean

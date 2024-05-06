@@ -19,8 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.model.user.ProfilePicResponse;
 import com.m99.userloginsystem.service.user.UserService;
+import com.m99.userloginsystem.utils.UserExracter;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @CrossOrigin
@@ -49,15 +51,24 @@ public class UserController {
 
 	@PostMapping({"/profile-pic"})
 	@CrossOrigin
-	public ResponseEntity<ProfilePicResponse> saveUserProfilePic(@RequestParam("id") String idStr, @RequestParam("file") MultipartFile multipartFile) {
-		long id = Long.parseLong(idStr);
-		System.out.println("In controller Saving "+ multipartFile.getOriginalFilename() + " by "+ id);
-		String result = this.userService.saveUserProfilePic(id, multipartFile);
+	public ResponseEntity<ProfilePicResponse> saveUserProfilePic(HttpServletRequest request, @RequestParam("profile-pic") MultipartFile multipartFile) {
 		ResponseEntity<ProfilePicResponse> response;
+		String type = multipartFile.getContentType().toLowerCase();
+		if(!(type.contains("jpeg") || type.contains("jpg") || type.contains("png"))) {
+			response = new ResponseEntity<>(ProfilePicResponse.builder().response("Only jpeg and png files are accepted.").build(), HttpStatus.CONFLICT);
+			return response;
+		}
+		long id = UserExracter.getUserIdFromRequest(request);
+		if(id == -1) {
+			response = new ResponseEntity<>(ProfilePicResponse.builder().response("Couldn't identify user.").build(), HttpStatus.CONFLICT);
+			return response;
+		}
+
+		String result = this.userService.saveUserProfilePic(id, multipartFile);
 		if(result != null && !result.trim().isEmpty())
 			response = new ResponseEntity<>(ProfilePicResponse.builder().response(result).build(), HttpStatus.OK);
 		else
-			response = new ResponseEntity<>(ProfilePicResponse.builder().response("error").build(), HttpStatus.INTERNAL_SERVER_ERROR);
+			response = new ResponseEntity<>(ProfilePicResponse.builder().response("Error while saving file at our end.").build(), HttpStatus.CONFLICT);
 		return response;
 	}
 

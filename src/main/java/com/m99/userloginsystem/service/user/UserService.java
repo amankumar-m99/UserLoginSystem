@@ -110,7 +110,18 @@ public class UserService {
 			fileOutputStream.write(data);
 			fileOutputStream.flush();
 			fileOutputStream.close();
-			ProfilePic profilePic = ProfilePic.builder().userId(id).imageName(targetFileName).location(profilePicsDirectory).build();
+			ProfilePic profilePic = profilePicDao.findByUserId(id).orElse(null);
+			if(profilePic != null) {
+				String oldFilePath = profilePic.getLocation()+File.separator+profilePic.getImageName();
+				File oldFile = new File(oldFilePath);
+				if(oldFile.exists())
+					oldFile.delete();
+				profilePic.setImageName(targetFileName);
+				profilePic.setLocation(profilePicsDirectory);
+			}
+			else {
+				profilePic = ProfilePic.builder().userId(id).imageName(targetFileName).location(profilePicsDirectory).build();
+			}
 			profilePicDao.save(profilePic);
 		} catch (IOException e) {
 			e.printStackTrace();
