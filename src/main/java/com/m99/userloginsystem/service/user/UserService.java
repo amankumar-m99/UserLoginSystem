@@ -1,6 +1,7 @@
 package com.m99.userloginsystem.service.user;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -102,31 +103,42 @@ public class UserService {
 		if(!file.exists())
 			file.mkdirs();
 		try {
-			String targetFileName = id+"_"+multipartFile.getOriginalFilename();
-			InputStream inputStream = multipartFile.getInputStream();
-			byte data[] = new byte[inputStream.available()];
-			inputStream.read(data);
-			FileOutputStream fileOutputStream = new FileOutputStream(profilePicsDirectory+File.separator+ targetFileName);
-			fileOutputStream.write(data);
-			fileOutputStream.flush();
-			fileOutputStream.close();
 			ProfilePic profilePic = profilePicDao.findByUserId(id).orElse(null);
 			if(profilePic != null) {
-				String oldFilePath = profilePic.getLocation()+File.separator+profilePic.getImageName();
-				File oldFile = new File(oldFilePath);
-				if(oldFile.exists())
-					oldFile.delete();
-				profilePic.setImageName(targetFileName);
-				profilePic.setLocation(profilePicsDirectory);
+				updateProfilePic(multipartFile, profilePic, id);
 			}
 			else {
+				String targetFileName = id+"_"+multipartFile.getOriginalFilename();
+				InputStream inputStream = multipartFile.getInputStream();
+				byte data[] = new byte[inputStream.available()];
+				inputStream.read(data);
+				FileOutputStream fileOutputStream = new FileOutputStream(profilePicsDirectory+File.separator+ targetFileName);
+				fileOutputStream.write(data);
+				fileOutputStream.flush();
+				fileOutputStream.close();
+				inputStream.close();
 				profilePic = ProfilePic.builder().userId(id).imageName(targetFileName).location(profilePicsDirectory).build();
+				profilePicDao.save(profilePic);
 			}
-			profilePicDao.save(profilePic);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return "/images/profile-pic/"+id;
+	}
+
+	private void updateProfilePic(MultipartFile multipartFile, ProfilePic profilePic, long id) throws IOException {
+		String oldFilePath = profilePic.getLocation()+File.separator+profilePic.getImageName();
+		File oldFile = new File(oldFilePath);
+		File newRenamedFile = new File(profilePic.getLocation()+File.separator+ id+ "_"+multipartFile.getOriginalFilename());
+		InputStream inputStream = multipartFile.getInputStream();
+		byte data[] = new byte[inputStream.available()];
+		inputStream.read(data);
+		FileOutputStream fileOutputStream = new FileOutputStream(oldFile);
+		fileOutputStream.write(data);
+		fileOutputStream.flush();
+		fileOutputStream.close();
+		inputStream.close();
+		oldFile.renameTo(newRenamedFile);
 	}
 
 	public UserProfilePicResource getUserProfilePicResource(long id) throws ImageResourceNotFoundException {
@@ -138,6 +150,15 @@ public class UserService {
 		if(!file.exists())
 			throw new ImageResourceNotFoundException("no resource found for this account");
 		return new UserProfilePicResource(file);
+	}
+
+	public UserProfilePicResource getFirstProfilePicResource() throws ImageResourceNotFoundException {
+		String profilePicsDirectory = StaticData.getApplicationDataDirectory()+File.separator+"TestImages";
+		File file = new File(profilePicsDirectory);
+		if(!file.exists())
+			throw new ImageResourceNotFoundException("no resource found for this account");
+		File[] listFiles = file.listFiles();
+		return new UserProfilePicResource(listFiles[0]);
 	}
 
 	private User createUserFromUserForm(UserForm userForm) {

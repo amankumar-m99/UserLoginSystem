@@ -53,8 +53,9 @@ public class UserController {
 	@CrossOrigin
 	public ResponseEntity<ProfilePicResponse> saveUserProfilePic(HttpServletRequest request, @RequestParam("profile-pic") MultipartFile multipartFile) {
 		ResponseEntity<ProfilePicResponse> response;
-		String type = multipartFile.getContentType().toLowerCase();
-		if(!(type.contains("jpeg") || type.contains("jpg") || type.contains("png"))) {
+//		String type = multipartFile.getContentType().toLowerCase();
+		String type = multipartFile.getOriginalFilename().toLowerCase();
+		if(!(type.endsWith("jpeg") || type.endsWith("jpg") || type.endsWith("png"))) {
 			response = new ResponseEntity<>(ProfilePicResponse.builder().response("Only jpeg and png files are accepted.").build(), HttpStatus.CONFLICT);
 			return response;
 		}
