@@ -238,11 +238,11 @@ public class UserService {
 	}
 
 	private void initRoles() {
-		Role superAdminRole = Role.builder().roleName("superadmin").roleDescription("The supreme admin").build();
+		Role superAdminRole = Role.builder().roleId("SPRADMN").roleName("superadmin").roleDescription("The supreme admin").build();
 		roleDao.save(superAdminRole);
-		Role adminRole = Role.builder().roleName("admin").roleDescription("The admin").build();
+		Role adminRole = Role.builder().roleId("ADMN").roleName("admin").roleDescription("The admin").build();
 		roleDao.save(adminRole);
-		Role userRole = Role.builder().roleName("user").roleDescription("The default user").build();
+		Role userRole = Role.builder().roleId("STDUSR").roleName("user").roleDescription("The default user").build();
 		roleDao.save(userRole);
 	}
 
