@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.m99.userloginsystem.entity.user.User;
-import com.m99.userloginsystem.model.user.UserForm;
+import com.m99.userloginsystem.model.user.registration.UserRegistrationFormModel;
 import com.m99.userloginsystem.service.registration.RegistrationService;
 import com.m99.userloginsystem.service.user.UserService;
 
@@ -26,8 +26,8 @@ public class RegistrationController {
 	private RegistrationService registrationService;
 
 	@PostMapping({"/user"})
-	public User registerUser(@RequestBody UserForm user) {
-		return userService.registerUser(user);
+	public User registerUser(@RequestBody UserRegistrationFormModel userRegistrationFormModel) {
+		return userService.registerUser(userRegistrationFormModel);
 	}
 
 	@GetMapping("/username-available/{username}")

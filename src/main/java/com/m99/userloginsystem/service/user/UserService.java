@@ -1,17 +1,13 @@
 package com.m99.userloginsystem.service.user;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,8 +32,8 @@ import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.entity.user.UserPersonalDetails;
 import com.m99.userloginsystem.entity.user.UserSecurityDetails;
 import com.m99.userloginsystem.entity.user.profilepic.UserProfilePicResource;
-import com.m99.userloginsystem.model.user.UserForm;
-import com.m99.userloginsystem.utils.enums.Gender;
+import com.m99.userloginsystem.initializer.StarterDataInitializer;
+import com.m99.userloginsystem.model.user.registration.UserRegistrationFormModel;
 
 @Service
 public class UserService {
@@ -77,19 +73,20 @@ public class UserService {
 		return user;
 	}
 
-	public User registerUser(UserForm userForm) {
-		if(!isUserAvailable(userForm.getEmail(), UserLookupType.EMAIL)) {
+	public User registerUser(UserRegistrationFormModel userForm) {
+		String email = userForm.getAccountDetails().getEmail();
+		if(!isUserAvailable(email, UserLookupType.EMAIL)) {
 			throw new EmailAlreadyExistsException("email already exists!");
 		}
-		EmailSecurityCode emailSecurityCode = emailSecurityCodeDao.findByEmail(userForm.getEmail()).orElse(null);
+		EmailSecurityCode emailSecurityCode = emailSecurityCodeDao.findByEmail(email).orElse(null);
 		if(emailSecurityCode != null) {
 			if(!emailSecurityCode.getIsUsed())
-				throw new EmailNotVerifiedException("email "+userForm.getEmail()+" is not verified.");
+				throw new EmailNotVerifiedException("email "+email+" is not verified.");
 		}
 		else {
-			throw new EmailNotVerifiedException("email "+userForm.getEmail()+" is not verified.");
+			throw new EmailNotVerifiedException("email "+email+" is not verified.");
 		}
-		if(!isUserAvailable(userForm.getUsername(), UserLookupType.USERNAME)) {
+		if(!isUserAvailable(userForm.getAccountDetails().getUsername(), UserLookupType.USERNAME)) {
 			throw new UserNameNotAvailableException("username already exists!");
 		}
 		User user = createUserFromUserForm(userForm);
@@ -161,32 +158,14 @@ public class UserService {
 		return new UserProfilePicResource(listFiles[0]);
 	}
 
-	private User createUserFromUserForm(UserForm userForm) {
-		UserPersonalDetails personalDetails = UserPersonalDetails.builder()
-				.firstName("N/A")
-				.middleName("N/A")
-				.lastName("N/A")
-				.phoneNumber("9876543210")
-				.gender(Gender.MALE)
-				.country("India")
-				.dateOfBirth(new Date())
-				.build();
-		personalDetails = userPersonalDetailsDao.save(personalDetails);
-		UserSecurityDetails securityDetails = UserSecurityDetails.builder()
-				.recoveryEmail("N/A")
-				.recoveryPhoneNumber("N/A")
-				.securityQuestion("N/A")
-				.securityAnswer("N/A")
-				.loginAlert(true)
-				.passwordUpdateAlert(true)
-				.twoStepLogin(true)
-				.build();
-		securityDetails = userSecurityDetailsDao.save(securityDetails);
+	private User createUserFromUserForm(UserRegistrationFormModel userForm) {
+		UserPersonalDetails personalDetails = userPersonalDetailsDao.save(userForm.getPersonalDetails()); 
+		UserSecurityDetails securityDetails = userSecurityDetailsDao.save(userForm.getSecurityDetails());
 		User user = User.builder()
-				.username(userForm.getUsername())
-				.email(userForm.getEmail())
-				.password(passwordEncoder.encode(userForm.getPassword()))
-				.roles(getRolesFromIds(userForm.getRoles()))
+				.username(userForm.getAccountDetails().getUsername())
+				.email(userForm.getAccountDetails().getEmail())
+				.password(passwordEncoder.encode(userForm.getAccountDetails().getPassword()))
+				.roles(getRolesFromIds(userForm.getAccountDetails().getRoles()))
 				.isLocked(false)
 				.isEnabled(true)
 				.isAccountExpired(false)
@@ -247,28 +226,8 @@ public class UserService {
 	}
 
 	private void initUsers(){
-		UserForm superAdminUserForm = UserForm.builder()
-				.username("superAdmin")
-				.email("superadmin@m99.com")
-				.password("1234")
-				.roles(Arrays.asList(1).stream().collect(Collectors.toSet()))
-				.build();
-		userDao.save(createUserFromUserForm(superAdminUserForm));
-
-		UserForm adminUserForm = UserForm.builder()
-				.username("admin")
-				.email("admin@m99.com")
-				.password("1234")
-				.roles(Arrays.asList(2).stream().collect(Collectors.toSet()))
-				.build();
-		userDao.save(createUserFromUserForm(adminUserForm));
-
-		UserForm userForm = UserForm.builder()
-				.username("amank")
-				.email("amankumar@m99.com")
-				.password("1234")
-				.roles(Arrays.asList(3).stream().collect(Collectors.toSet()))
-				.build();
-		userDao.save(createUserFromUserForm(userForm));
+		userDao.save(createUserFromUserForm(StarterDataInitializer.getSuperAdmin()));
+		userDao.save(createUserFromUserForm(StarterDataInitializer.getAdmin()));
+		userDao.save(createUserFromUserForm(StarterDataInitializer.getStandardUser()));
 	}
 }

@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.model.user;
+package com.m99.userloginsystem.model.user.registration;
 
 import java.util.Set;
 
@@ -13,9 +13,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserForm {
+public class AccountDetails {
 	private String username;
 	private String email;
 	private String password;
+	private Boolean promotionalMails;
 	private Set<Integer> roles;
 }
