@@ -17,6 +17,5 @@ public class AccountDetails {
 	private String username;
 	private String email;
 	private String password;
-	private Boolean promotionalMails;
 	private Set<Integer> roles;
 }
