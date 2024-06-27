@@ -11,7 +11,10 @@ public class SwaggerUiConfiguration {
 	        "/v3/api-docs/**",
 	        "/swagger-ui/**",
 	        "/v2/api-docs/**",
-	        "/swagger-resources/**"
+	        "/swagger-resources/**",
+	        "/bus/v3/api-docs/**",
+	        "/api-docs/swagger-config/**",
+	        "/api-docs/public/**"
 	};
 
 	public static String[] getSwaggerUrls() {
