@@ -1,5 +1,6 @@
 package com.m99.userloginsystem.controller.smtp;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.m99.userloginsystem.entity.smtp.Smtp;
 import com.m99.userloginsystem.service.smtp.SmtpService;
 
+import jakarta.annotation.PostConstruct;
+
 @RestController
 @RequestMapping("/smtp")
 @PreAuthorize("hasRole('admin')")
@@ -26,6 +29,17 @@ public class SmtpController {
 
 	@Autowired
 	private SmtpService smtpService;
+
+	@PostConstruct
+	public void initSmtp() {
+		System.out.println("->Initialising SMTP...");
+		try {
+			smtpService.initSmtps();
+			System.out.println("-> SMTP initialized.");
+		} catch (IOException e) {
+			System.out.println("-> Couldn't init smtp due to IO exception. "+ e.getMessage());
+		}
+	}
 
 	@PostMapping("/add")
 	public Smtp add(@RequestBody Smtp smtp) {
