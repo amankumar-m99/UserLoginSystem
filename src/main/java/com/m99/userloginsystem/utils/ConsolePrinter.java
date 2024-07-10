@@ -3,14 +3,20 @@ package com.m99.userloginsystem.utils;
 public class ConsolePrinter {
 
 	private static final boolean doPrint = true;
-	public static void print(String s) {
+	public static void printInfo(String s) {
 		if(doPrint) {
-			System.out.println(s);
+			System.out.println("#[INFO]"+s);
 		}
 	}
 
-	public static void handleException(Exception e, String message) {
-		print(message);
-		e.printStackTrace();
+	public static void printError(String s) {
+		if(doPrint) {
+			System.out.println("#[ERROR]"+s);
+		}
+	}
+
+	public static void printException(Exception e, String message) {
+		printError(message);
+		printError(e.getMessage());
 	}
 }

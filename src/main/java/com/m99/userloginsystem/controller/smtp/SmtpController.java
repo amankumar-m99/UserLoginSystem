@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.m99.userloginsystem.entity.smtp.Smtp;
 import com.m99.userloginsystem.service.smtp.SmtpService;
+import com.m99.userloginsystem.utils.ConsolePrinter;
 
 import jakarta.annotation.PostConstruct;
 
@@ -32,12 +33,11 @@ public class SmtpController {
 
 	@PostConstruct
 	public void initSmtp() {
-		System.out.println("->Initialising SMTP...");
+		ConsolePrinter.printInfo("Initialising SMTP...");
 		try {
 			smtpService.initSmtps();
-			System.out.println("-> SMTP initialized.");
 		} catch (IOException e) {
-			System.out.println("-> Couldn't init smtp due to IO exception. "+ e.getMessage());
+			ConsolePrinter.printException(e, "Couldn't initialize smtp due to IO exception.");
 		}
 	}
 

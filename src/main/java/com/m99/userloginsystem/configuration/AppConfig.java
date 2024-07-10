@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.m99.userloginsystem.configuration.data.StaticData;
 import com.m99.userloginsystem.customexception.datadirectorypolicy.InvalidDataDirectoryPolicyException;
+import com.m99.userloginsystem.utils.ConsolePrinter;
 
 import jakarta.annotation.PostConstruct;
 
@@ -31,13 +32,13 @@ public class AppConfig {
 
 	@PostConstruct()
 	public void initApplicationDataDirectory() {
-		System.out.println("-> Initialising dataDirectory...");
+		ConsolePrinter.printInfo("Initialising data-directory...");
 		ApplicationDataDirectoryPolicy policy = getApplicationDataDirectoryPolicyFromString(dataDirectoryPolicy);
 		if(dataDirectoryHome == null || dataDirectoryHome.trim().isEmpty())
 			StaticData.setApplicationDataDirectoryParent(System.getProperty("user.dir"), policy);
 		else
 			StaticData.setApplicationDataDirectoryParent(dataDirectoryHome.replace(".", File.separator), policy);
-		System.out.println("-> Initialed dataDirectory to "+ StaticData.getApplicationDataDirectory());
+		ConsolePrinter.printInfo("Data-directory initialed to "+ StaticData.getApplicationDataDirectory());
 	}
 
 	public ApplicationDataDirectoryPolicy getApplicationDataDirectoryPolicyFromString(String policyStr) {

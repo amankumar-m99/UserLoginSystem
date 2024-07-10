@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.model.user.ProfilePicResponse;
 import com.m99.userloginsystem.service.user.UserService;
+import com.m99.userloginsystem.utils.ConsolePrinter;
 import com.m99.userloginsystem.utils.UserExracter;
 
 import jakarta.annotation.PostConstruct;
@@ -33,9 +34,9 @@ public class UserController {
 	
 	@PostConstruct
 	public void initRolesAndUsers() {
-		System.out.println("->Initialising DB...");
+		ConsolePrinter.printInfo("Initialising database...");
 		userService.initRolesAndUsers();
-		System.out.println("->DB initialized.");
+		ConsolePrinter.printInfo("Database initialized.");
 	}
 
 	@GetMapping({"/all-users"})

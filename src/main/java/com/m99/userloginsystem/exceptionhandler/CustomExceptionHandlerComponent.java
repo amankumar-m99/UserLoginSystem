@@ -17,6 +17,7 @@ import com.m99.userloginsystem.customexception.images.ImageResourceNotFoundExcep
 import com.m99.userloginsystem.customexception.multipart.FileSizeTooLargeException;
 import com.m99.userloginsystem.customexception.smtp.NoSuchSmtpException;
 import com.m99.userloginsystem.customexception.user.UserNameNotAvailableException;
+import com.m99.userloginsystem.utils.ConsolePrinter;
 import com.m99.userloginsystem.utils.CustomError;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,14 +60,14 @@ public class CustomExceptionHandlerComponent {
 		try {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception);			
 		}catch (Exception e) {
-			System.out.println("-> something unintended happened in handeler of ImageResourceNotFoundException");
+			ConsolePrinter.printException(e, "Something unintended happened in handler of ImageResourceNotFoundException");
 		}
 		return null;
 	}
 
 	@ExceptionHandler(value = ClientAbortException.class)
 	public void handleClientAbortException(ClientAbortException e) {
-	    System.out.println("-> Client abort exception occured. Don't worry we have got it.");
+		ConsolePrinter.printException(e, "Client abort exception occured. Don't worry we have got it.");
 	}
 
 	@ExceptionHandler(value = MaxUploadSizeExceededException.class)

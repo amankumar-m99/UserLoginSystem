@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.m99.userloginsystem.customexception.smtp.NoSuchSmtpException;
 import com.m99.userloginsystem.dao.smtp.SmtpDao;
 import com.m99.userloginsystem.entity.smtp.Smtp;
+import com.m99.userloginsystem.utils.ConsolePrinter;
 
 //@Service
 @Component
@@ -54,16 +55,18 @@ public class SmtpService {
 		smtpDao.delete(smtp);
 	}
 
-	public void initSmtps() throws IOException {
+	public boolean initSmtps() throws IOException{
 		String smtpFilelocation = "smtp.properties";
 		File file = new File(smtpFilelocation);
 		if(!file.exists()) {
-			System.out.println("-> Couldn't init SMTPs");
-			return;
+			ConsolePrinter.printError("Couldn't initialize SMTPs. File '"+smtpFilelocation+"' is missing or misplaced!");
+			return false;
 		}
 		Properties smtpProperties = readPropertiesFile(smtpFilelocation);
 		Smtp smtp = getSmtpFromProperties(smtpProperties);
 		add(smtp);
+		ConsolePrinter.printInfo("SMTP initialized successfully.");
+		return true;
 	}
 
 	private Properties readPropertiesFile(String fileName) throws IOException {

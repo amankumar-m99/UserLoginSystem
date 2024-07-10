@@ -47,17 +47,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (IllegalArgumentException e) {
             	String msg = "Illegal Argument while fetching the username!";
                 logger.info(msg);
-                ConsolePrinter.handleException(e, msg);
+                ConsolePrinter.printException(e, msg);
             } catch (ExpiredJwtException e) {
             	String msg = "Given jwt token is expired!";
                 logger.info(msg);
-                ConsolePrinter.handleException(e, msg);
+                ConsolePrinter.printException(e, msg);
             } catch (MalformedJwtException e) {
             	String msg = "Token has been tempered! Invalid Token.";
                 logger.info(msg);
-                ConsolePrinter.handleException(e, msg);
+                ConsolePrinter.printException(e, msg);
             } catch (Exception e) {
-                ConsolePrinter.handleException(e, e.getMessage());
+                ConsolePrinter.printException(e, e.getMessage());
             }
         } else {
         	String msg = "Invalid Header Value! Bearer not found";
