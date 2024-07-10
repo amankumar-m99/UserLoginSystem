@@ -11,7 +11,7 @@ public class ConsolePrinter {
 
 	public static void printError(String s) {
 		if(doPrint) {
-			System.out.println("#[ERROR]"+s);
+			System.err.println("#[ERROR]"+s);
 		}
 	}
 
