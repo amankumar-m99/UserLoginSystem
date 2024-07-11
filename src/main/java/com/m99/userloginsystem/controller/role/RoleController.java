@@ -15,8 +15,8 @@ import com.m99.userloginsystem.entity.role.Role;
 import com.m99.userloginsystem.service.role.RoleService;
 
 @RestController
-@RequestMapping("/role")
 @CrossOrigin
+@RequestMapping("/role")
 public class RoleController {
 
 	@Autowired

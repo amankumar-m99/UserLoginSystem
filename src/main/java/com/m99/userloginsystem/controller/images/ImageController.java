@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/images")
+@RequestMapping("/image")
 public class ImageController {
 
 	@Autowired

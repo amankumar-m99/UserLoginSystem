@@ -15,8 +15,8 @@ import com.m99.userloginsystem.service.registration.RegistrationService;
 import com.m99.userloginsystem.service.user.UserService;
 
 @RestController
-@RequestMapping("/register")
 @CrossOrigin
+@RequestMapping("/register")
 public class RegistrationController {
 
 	@Autowired

@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.m99.userloginsystem.model.EmailVerificationCode;
@@ -15,6 +16,7 @@ import com.m99.userloginsystem.service.jwt.JwtService;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/jwt")
 public class JwtController {
 
 	@Autowired

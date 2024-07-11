@@ -23,9 +23,9 @@ import com.m99.userloginsystem.utils.ConsolePrinter;
 import jakarta.annotation.PostConstruct;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/smtp")
 @PreAuthorize("hasRole('admin')")
-@CrossOrigin
 public class SmtpController {
 
 	@Autowired
