@@ -33,7 +33,7 @@ public class EmailVerificationService {
 		EmailSecurityCode emailSecurityCode = EmailSecurityCode.builder()
 				.email(emailForm.getEmail())
 				.securityCode(securityCode)
-				.date(new Date())
+				.createdOn(new Date())
 				.isUsed(false)
 				.isExpired(false)
 				.build();

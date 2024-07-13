@@ -21,14 +21,13 @@ import lombok.Setter;
 @Builder
 @Entity
 public class EmailSecurityCode {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String email;
 	private int securityCode;
 	@Temporal(TemporalType.TIME)
-	private Date date;
+	private Date createdOn;
 	private Boolean isUsed;
 	private Boolean isExpired;
 }

@@ -33,8 +33,8 @@ public class JwtController {
 		return userDetailsService.createJwtToken(jwtRequest, authenticationManager);
 	}
 
-	@PostMapping({"/enable"})
-	public String enableUser(@RequestBody EmailSecurityCodeForm emailSecurityCodeForm) {
+	@PostMapping({"/activate"})
+	public String activateUser(@RequestBody EmailSecurityCodeForm emailSecurityCodeForm) {
 		String email = emailVerificationService.activateUserBySecurityCode(emailSecurityCodeForm);
 		return email;
 	}
