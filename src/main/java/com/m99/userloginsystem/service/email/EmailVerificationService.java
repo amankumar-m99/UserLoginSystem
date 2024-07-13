@@ -2,16 +2,13 @@ package com.m99.userloginsystem.service.email;
 
 import java.util.Date;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.m99.userloginsystem.customexception.email.EmailNotFoundException;
 import com.m99.userloginsystem.dao.security.EmailSecurityCodeDao;
-import com.m99.userloginsystem.dao.security.EmailVerificationDao;
 import com.m99.userloginsystem.entity.security.EmailSecurityCode;
-import com.m99.userloginsystem.entity.security.EmailVerification;
 import com.m99.userloginsystem.model.EmailSecurityCodeForm;
 import com.m99.userloginsystem.model.email.EmailForm;
 import com.m99.userloginsystem.utils.OtpGenerator;
@@ -20,18 +17,15 @@ import com.m99.userloginsystem.utils.OtpGenerator;
 public class EmailVerificationService {
 
 	@Autowired
-	private EmailVerificationDao emailVerificationDao;
-
-	@Autowired
 	private EmailSecurityCodeDao emailSecurityCodeDao;
 
-	public String activateUserByCode(String verificationCode) {
-		EmailVerification emailVerification = emailVerificationDao.findByVerificationCode(verificationCode).get();
-		if(emailVerification == null)
-			throw new NoSuchElementException("Invalid activation key!");
-		emailVerification.setIsExpired(true);
-		emailVerification.setIsUsed(true);
-		return emailVerification.getEmail();
+	public String activateUserBySecurityCode(EmailSecurityCodeForm emailSecurityCodeForm) {
+		EmailSecurityCode emailSecurityCode = emailSecurityCodeDao.findByEmail(emailSecurityCodeForm.getEmail()).orElse(null);
+		if(emailSecurityCode == null)
+			throw new NoSuchElementException("Invalid email");
+		emailSecurityCode.setIsExpired(true);
+		emailSecurityCode.setIsUsed(true);
+		return emailSecurityCode.getEmail();
 	}
 
 	public EmailSecurityCode generateSecurityCodeForEmail(EmailForm emailForm) {
@@ -44,18 +38,6 @@ public class EmailVerificationService {
 				.isExpired(false)
 				.build();
 		return emailSecurityCodeDao.save(emailSecurityCode);
-	}
-
-	public EmailVerification addEmailToVerificationList(EmailForm emailForm) {
-		String verificationCode = UUID.randomUUID().toString();
-		EmailVerification emailVerification = EmailVerification.builder()
-				.email(emailForm.getEmail())
-				.verificationCode(verificationCode)
-				.date(new Date())
-				.isUsed(false)
-				.isExpired(false)
-				.build();
-		return emailVerificationDao.save(emailVerification);
 	}
 
 	public boolean verifySecurityCode(EmailSecurityCodeForm emailSecurityCodeForm) {
