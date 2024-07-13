@@ -13,7 +13,7 @@ import com.m99.userloginsystem.mail.templates.SecurityCodeTemplate;
 public class EmailSenderService {
 
 	@Autowired
-	private EmailSender emailSender;
+	private EmailSenderDriver emailSenderDriver;
 
 	public boolean sendLoginMail(User user) {
 		Date date = new Date();
@@ -24,16 +24,10 @@ public class EmailSenderService {
 		return true;
 	}
 
-	public boolean sendEmailVerificationLink(String email, String verificationCode) {
-//		return sendEmail(email, "", "Activation Link", verificationCode);
-		return true;
-	}
-
 	public boolean sendSecurityCode(String email, int securityCode) throws EmailException {
 		SecurityCodeTemplate template = new SecurityCodeTemplate(securityCode, email);
-//		String content = template.getHtmlContent();
 		String content = template.getTextContent();
-		emailSender.sendMail(email, "Security Code From M99", content, EmailContentType.SIMPLE_TEXT);
+		emailSenderDriver.sendMail(email, "Security Code From M99", content, EmailContentType.SIMPLE_TEXT);
 		return true;
 	}
 }

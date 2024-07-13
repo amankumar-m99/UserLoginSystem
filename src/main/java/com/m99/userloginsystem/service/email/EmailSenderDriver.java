@@ -23,28 +23,31 @@ import jakarta.mail.internet.MimeMessage;
 
 //@Component
 @Service
-public class EmailSender {
+public class EmailSenderDriver {
 
 	@Autowired
 	private SmtpService smtpService;
 
 	private Smtp smtpData;
 	private Session session;
-	private String username;
+	private Properties smtpProperties;
 
 	private void initData() {
-		smtpData = this.smtpService.getById(1);
-		Properties smtpProperties = new Properties();
-		smtpProperties.put("mail.smtp.auth", smtpData.getAuth());
-		smtpProperties.put("mail.smtp.starttls.enable", smtpData.getStarttlsEnable());
-		smtpProperties.put("mail.smtp.port", smtpData.getPort());
-		smtpProperties.put("mail.smtp.host", smtpData.getHost());
-		username = smtpData.getUsername();
+		if(smtpData == null) {
+			smtpData = this.smtpService.getById(1);
+		}
+		if(smtpProperties == null) {
+			smtpProperties = new Properties();
+			smtpProperties.put("mail.smtp.auth", smtpData.getAuth());
+			smtpProperties.put("mail.smtp.starttls.enable", smtpData.getStarttlsEnable());
+			smtpProperties.put("mail.smtp.port", smtpData.getPort());
+			smtpProperties.put("mail.smtp.host", smtpData.getHost());
+		}
 		String password = smtpData.getPassword();
 		session = Session.getInstance(smtpProperties, new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
+				return new PasswordAuthentication(smtpData.getUsername(), password);
 			}
 		});
 	}
@@ -92,7 +95,7 @@ public class EmailSender {
 		try {
 			Message message = new MimeMessage(session);
 			message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
-			message.setFrom(new InternetAddress(username));
+			message.setFrom(new InternetAddress(smtpData.getUsername()));
 			message.setSubject(subject);
 			message.setText(content);
 			Transport.send(message);
