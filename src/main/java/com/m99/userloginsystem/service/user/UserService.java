@@ -211,6 +211,14 @@ public class UserService {
 		return true;
 	}
 
+	public User getUserByUsernameOrEmail(String usernameOrEmail) {
+		User user = userDao.findByEmail(usernameOrEmail).orElse(null);
+		if(user == null) {
+			user = userDao.findByUsername(usernameOrEmail).get();
+		}
+		return user;
+	}
+
 	public void initRolesAndUsers() {
 		initRoles();
 		initUsers();
