@@ -27,7 +27,7 @@ public class EmailVerificationController {
 
 	@PostMapping("/security-code")
 	public void generateSecurityCodeForEmail(@RequestBody EmailForm emailForm) throws EmailException {
-		EmailSecurityCode emailSecurityCode = emailVerificationService.generateSecurityCodeForEmail(emailForm);
+		EmailSecurityCode emailSecurityCode = emailVerificationService.generateSecurityCodeForEmail(emailForm.getEmail());
 		String email = emailSecurityCode.getEmail();
 		int securityCode = emailSecurityCode.getSecurityCode();
 		emailSenderService.sendSecurityCode(email, securityCode);

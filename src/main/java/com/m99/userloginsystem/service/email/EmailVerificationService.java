@@ -28,10 +28,10 @@ public class EmailVerificationService {
 		return emailSecurityCode.getEmail();
 	}
 
-	public EmailSecurityCode generateSecurityCodeForEmail(EmailForm emailForm) {
+	public EmailSecurityCode generateSecurityCodeForEmail(String email) {
 		int securityCode = OtpGenerator.generateOtp(6);
 		EmailSecurityCode emailSecurityCode = EmailSecurityCode.builder()
-				.email(emailForm.getEmail())
+				.email(email)
 				.securityCode(securityCode)
 				.createdOn(new Date())
 				.isUsed(false)
