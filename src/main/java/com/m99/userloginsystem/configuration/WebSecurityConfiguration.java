@@ -46,6 +46,7 @@ public class WebSecurityConfiguration {
                 .requestMatchers("/images/**").permitAll()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/register/**").permitAll()
+                .requestMatchers("/password-update/user").permitAll()
                 .requestMatchers("/enable").permitAll()
                 .requestMatchers("/email/**").permitAll()
                 .anyRequest().authenticated()
