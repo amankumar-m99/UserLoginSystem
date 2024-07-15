@@ -23,7 +23,7 @@ public class StarterDataInitializer {
 				.middleName("")
 				.lastName("Admin")
 				.phoneNumber("")
-				.gender(null)
+				.gender(Gender.MALE)
 				.country("")
 				.dateOfBirth(new Date())
 				.build();
@@ -56,7 +56,7 @@ public class StarterDataInitializer {
 				.middleName("")
 				.lastName("")
 				.phoneNumber("")
-				.gender(null)
+				.gender(Gender.FEMALE)
 				.country("")
 				.dateOfBirth(new Date())
 				.build();
@@ -80,7 +80,7 @@ public class StarterDataInitializer {
 	public static UserRegistrationFormModel getStandardUser() {
 		AccountDetails accountDetails = AccountDetails.builder()
 				.username("amank")
-				.email("amankumar@m99.com")
+				.email("amankumar.m99@gmail.com")
 				.password("1234")
 				.roles(Arrays.asList(3).stream().collect(Collectors.toSet()))
 				.build();
@@ -89,7 +89,7 @@ public class StarterDataInitializer {
 				.middleName("")
 				.lastName("User")
 				.phoneNumber("")
-				.gender(Gender.MALE)
+				.gender(Gender.OTHER)
 				.country("")
 				.dateOfBirth(new Date())
 				.build();

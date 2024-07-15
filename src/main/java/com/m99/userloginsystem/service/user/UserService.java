@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -214,7 +215,10 @@ public class UserService {
 	public User getUserByUsernameOrEmail(String usernameOrEmail) {
 		User user = userDao.findByEmail(usernameOrEmail).orElse(null);
 		if(user == null) {
-			user = userDao.findByUsername(usernameOrEmail).get();
+			user = userDao.findByUsername(usernameOrEmail).orElse(null);
+		}
+		if(user == null) {
+			throw new UsernameNotFoundException("No user exists with username or email as '"+ usernameOrEmail +"'");
 		}
 		return user;
 	}

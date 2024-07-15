@@ -27,10 +27,10 @@ public class JwtService implements UserDetailsService{
 	private JwtHelper jwtHelper;
 
 	public JwtResponse createJwtToken(JwtRequest jwtRequest, AuthenticationManager authenticationManager) throws Exception {
-		String userName = jwtRequest.getEmail();
+		String username = jwtRequest.getEmail();
 		String password = jwtRequest.getPassword();
-		authenticate(userName, password, authenticationManager);
-		User user = (User) loadUserByUsername(userName);
+		User user = (User) loadUserByUsername(username);
+		authenticate(username, password, authenticationManager);
 		String generateToken = jwtHelper.generateToken(user);
 		return new JwtResponse(generateToken, user.getId());
 	}
@@ -38,9 +38,6 @@ public class JwtService implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username) {
 		User user = userService.getUserByUsernameOrEmail(username);
-		if(user == null) {
-			throw new UsernameNotFoundException("No user exists with username or email as '"+ username +"'");
-		}
 		return user;
 	}
 

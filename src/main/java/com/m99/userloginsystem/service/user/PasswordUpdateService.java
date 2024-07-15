@@ -25,9 +25,6 @@ public class PasswordUpdateService {
 
 	public boolean updatePassword(EmailForm emailForm) throws EmailException {
 		User user = userService.getUserByUsernameOrEmail(emailForm.getEmail());
-		if(user == null) {
-			throw new UsernameNotFoundException("No user exists with username or email as '"+ emailForm.getEmail() +"'");
-		}
 		return sendSecurityCodeForPasswordUpdate(user.getEmail());
 	}
 
