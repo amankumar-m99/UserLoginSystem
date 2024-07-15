@@ -52,20 +52,19 @@ public class EmailSenderDriver {
 		});
 	}
 
-	public void sendMail(String recipientEmail, String subject, String content, EmailContentType contentType) throws EmailException {
+	public boolean sendMail(String recipientEmail, String subject, String content, EmailContentType contentType) throws EmailException {
 		initData();
 		switch (contentType) {
 		case SIMPLE_TEXT:
 //			sendTextMail(recipientEmail, subject, content);
-			sendMail2(recipientEmail, subject, content);
-			break;
+			return sendMail2(recipientEmail, subject, content);
 		case HTML:
-			sendHtmlMail(recipientEmail, subject, content);
-			break;
+			return sendHtmlMail(recipientEmail, subject, content);
 		}
+		return false;
 	}
 
-	private void sendTextMail(String recipientEmail, String subject, String content) throws EmailException {
+	private boolean sendTextMail(String recipientEmail, String subject, String content) throws EmailException {
 		Email email = new SimpleEmail();
 		email.setHostName(smtpData.getHost());
 		email.setSmtpPort(smtpData.getPort());
@@ -75,10 +74,14 @@ public class EmailSenderDriver {
 		email.setSubject(subject);
 		email.setMsg(content);
 		email.addTo(recipientEmail);
-		email.send();
+		String response = email.send();
+		if(response != null) {
+			return true;
+		}
+		return false;
 	}
 
-	private void sendHtmlMail(String recipientEmail, String subject, String content) throws EmailException {
+	private boolean sendHtmlMail(String recipientEmail, String subject, String content) throws EmailException {
 		HtmlEmail email = new HtmlEmail();
 		email.setHostName(smtpData.getHost());
 		email.addTo(recipientEmail, recipientEmail);
@@ -87,11 +90,15 @@ public class EmailSenderDriver {
 		email.setHtmlMsg(content);
 		// set the alternative message
 		email.setTextMsg("Your email client does not support HTML messages");
-		email.send();
+		String response = email.send();
+		if(response != null) {
+			return true;
+		}
+		return false;
 	}
 
 	private boolean sendMail2(String recipientEmail, String subject, String content) {
-		boolean flag = true;
+		boolean flag = false;
 		try {
 			Message message = new MimeMessage(session);
 			message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));

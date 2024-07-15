@@ -24,10 +24,13 @@ public class EmailSenderService {
 		return true;
 	}
 
-	public boolean sendSecurityCode(String email, int securityCode) throws EmailException {
-		SecurityCodeTemplate template = new SecurityCodeTemplate(securityCode, email);
-		String content = template.getTextContent();
-		emailSenderDriver.sendMail(email, "Security Code From M99", content, EmailContentType.SIMPLE_TEXT);
-		return true;
+	public boolean sendSecurityCode(String emailId, int securityCode) throws EmailException {
+		return sendSecurityCodeOnAThread(emailId, securityCode);
+	}
+
+	private boolean sendSecurityCodeOnAThread(String emailId, int securityCode) {
+		Thread thread = new SecurityCodeSenderThread(emailSenderDriver, emailId, securityCode);
+		thread.start();
+		return true;	
 	}
 }
