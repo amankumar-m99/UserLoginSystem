@@ -10,7 +10,7 @@ import com.m99.userloginsystem.customexception.email.EmailNotFoundException;
 import com.m99.userloginsystem.dao.security.EmailSecurityCodeDao;
 import com.m99.userloginsystem.entity.security.EmailSecurityCode;
 import com.m99.userloginsystem.model.EmailSecurityCodeForm;
-import com.m99.userloginsystem.model.email.EmailForm;
+import com.m99.userloginsystem.model.SecurityCodePurpose;
 import com.m99.userloginsystem.utils.OtpGenerator;
 
 @Service
@@ -28,11 +28,12 @@ public class EmailVerificationService {
 		return emailSecurityCode.getEmail();
 	}
 
-	public EmailSecurityCode generateSecurityCodeForEmail(String email) {
+	public EmailSecurityCode generateSecurityCodeForEmail(String email, SecurityCodePurpose securityCodePurpose) {
 		int securityCode = OtpGenerator.generateOtp(6);
 		EmailSecurityCode emailSecurityCode = EmailSecurityCode.builder()
 				.email(email)
 				.securityCode(securityCode)
+				.purpose(securityCodePurpose)
 				.createdOn(new Date())
 				.isUsed(false)
 				.isExpired(false)

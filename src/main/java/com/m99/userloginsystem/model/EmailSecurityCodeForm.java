@@ -12,4 +12,5 @@ import lombok.Setter;
 public class EmailSecurityCodeForm {
 	private String email;
 	private int securityCode;
+	private SecurityCodePurpose purpose;
 }

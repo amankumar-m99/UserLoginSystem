@@ -2,6 +2,8 @@ package com.m99.userloginsystem.entity.security;
 
 import java.util.Date;
 
+import com.m99.userloginsystem.model.SecurityCodePurpose;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +28,7 @@ public class EmailSecurityCode {
 	private long id;
 	private String email;
 	private int securityCode;
+	private SecurityCodePurpose purpose;
 	@Temporal(TemporalType.TIME)
 	private Date createdOn;
 	private Boolean isUsed;
