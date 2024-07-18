@@ -56,27 +56,9 @@ public class EmailSenderDriver {
 		initData();
 		switch (contentType) {
 		case SIMPLE_TEXT:
-//			sendTextMail(recipientEmail, subject, content);
 			return sendMail2(recipientEmail, subject, content);
 		case HTML:
 			return sendHtmlMail(recipientEmail, subject, content);
-		}
-		return false;
-	}
-
-	private boolean sendTextMail(String recipientEmail, String subject, String content) throws EmailException {
-		Email email = new SimpleEmail();
-		email.setHostName(smtpData.getHost());
-		email.setSmtpPort(smtpData.getPort());
-		email.setAuthenticator(new DefaultAuthenticator(smtpData.getUsername(), smtpData.getPassword()));
-		email.setSSLOnConnect(smtpData.getStarttlsEnable());
-		email.setFrom(smtpData.getUsername());
-		email.setSubject(subject);
-		email.setMsg(content);
-		email.addTo(recipientEmail);
-		String response = email.send();
-		if(response != null) {
-			return true;
 		}
 		return false;
 	}
