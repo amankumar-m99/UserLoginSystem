@@ -2,11 +2,8 @@ package com.m99.userloginsystem.service.email;
 
 import java.util.Properties;
 
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
-import org.apache.commons.mail.SimpleEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +53,7 @@ public class EmailSenderDriver {
 		initData();
 		switch (contentType) {
 		case SIMPLE_TEXT:
-			return sendMail2(recipientEmail, subject, content);
+			return sendTextMail(recipientEmail, subject, content);
 		case HTML:
 			return sendHtmlMail(recipientEmail, subject, content);
 		}
@@ -67,7 +64,7 @@ public class EmailSenderDriver {
 		HtmlEmail email = new HtmlEmail();
 		email.setHostName(smtpData.getHost());
 		email.addTo(recipientEmail, recipientEmail);
-		email.setFrom(smtpData.getUsername(), smtpData.getUsername());
+		email.setFrom(smtpData.getUsername()+"@gmail.com", smtpData.getUsername());
 		email.setSubject(subject);
 		email.setHtmlMsg(content);
 		// set the alternative message
@@ -79,7 +76,7 @@ public class EmailSenderDriver {
 		return false;
 	}
 
-	private boolean sendMail2(String recipientEmail, String subject, String content) {
+	private boolean sendTextMail(String recipientEmail, String subject, String content) {
 		boolean flag = false;
 		try {
 			Message message = new MimeMessage(session);
