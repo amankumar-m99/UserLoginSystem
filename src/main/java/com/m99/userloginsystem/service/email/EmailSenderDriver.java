@@ -2,8 +2,6 @@ package com.m99.userloginsystem.service.email;
 
 import java.util.Properties;
 
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +16,6 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-//@Component
 @Service
 public class EmailSenderDriver {
 
@@ -49,29 +46,13 @@ public class EmailSenderDriver {
 		});
 	}
 
-	public boolean sendMail(String recipientEmail, String subject, String content, EmailContentType contentType) throws EmailException {
+	public boolean sendMail(String recipientEmail, String subject, String content, EmailContentType contentType) {
 		initData();
 		switch (contentType) {
 		case SIMPLE_TEXT:
 			return sendTextMail(recipientEmail, subject, content);
 		case HTML:
-			return sendHtmlMail(recipientEmail, subject, content);
-		}
-		return false;
-	}
-
-	private boolean sendHtmlMail(String recipientEmail, String subject, String content) throws EmailException {
-		HtmlEmail email = new HtmlEmail();
-		email.setHostName(smtpData.getHost());
-		email.addTo(recipientEmail, recipientEmail);
-		email.setFrom(smtpData.getUsername()+"@gmail.com", smtpData.getUsername());
-		email.setSubject(subject);
-		email.setHtmlMsg(content);
-		// set the alternative message
-		email.setTextMsg("Your email client does not support HTML messages");
-		String response = email.send();
-		if(response != null) {
-			return true;
+			return sendTextMail(recipientEmail, subject, content);
 		}
 		return false;
 	}

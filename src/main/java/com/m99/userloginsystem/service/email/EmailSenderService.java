@@ -1,6 +1,5 @@
 package com.m99.userloginsystem.service.email;
 
-import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,7 @@ public class EmailSenderService {
 	@Autowired
 	private EmailSenderDriver emailSenderDriver;
 
-	public boolean sendSecurityCode(EmailSecurityCode emailSecurityCode) throws EmailException {
+	public boolean sendSecurityCode(EmailSecurityCode emailSecurityCode) {
 		return sendSecurityCodeOnAThread(emailSecurityCode);
 	}
 

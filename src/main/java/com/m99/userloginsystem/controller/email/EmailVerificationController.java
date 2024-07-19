@@ -1,6 +1,5 @@
 package com.m99.userloginsystem.controller.email;
 
-import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +26,7 @@ public class EmailVerificationController {
 	private EmailSenderService emailSenderService;
 
 	@PostMapping("/security-code")
-	public void generateSecurityCodeForEmail(@RequestBody EmailForm emailForm) throws EmailException {
+	public void generateSecurityCodeForEmail(@RequestBody EmailForm emailForm) {
 		EmailSecurityCode emailSecurityCode = emailVerificationService.generateSecurityCodeForEmail(emailForm.getEmail(), SecurityCodePurpose.REGISTRATION);
 		emailSenderService.sendSecurityCode(emailSecurityCode);
 	}

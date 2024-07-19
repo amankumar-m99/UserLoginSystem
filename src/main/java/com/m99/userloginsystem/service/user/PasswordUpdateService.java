@@ -1,6 +1,5 @@
 package com.m99.userloginsystem.service.user;
 
-import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +22,12 @@ public class PasswordUpdateService {
 	@Autowired
 	private EmailVerificationService emailVerificationService;
 
-	public boolean updatePassword(EmailForm emailForm) throws EmailException {
+	public boolean updatePassword(EmailForm emailForm) {
 		User user = userService.getUserByUsernameOrEmail(emailForm.getEmail());
 		return sendSecurityCodeForPasswordUpdate(user.getEmail());
 	}
 
-	private boolean sendSecurityCodeForPasswordUpdate(String email) throws EmailException {
+	private boolean sendSecurityCodeForPasswordUpdate(String email) {
 		EmailSecurityCode emailSecurityCode = emailVerificationService.generateSecurityCodeForEmail(email, SecurityCodePurpose.UPDATE_PASSWORD);
 		boolean isSent = emailSenderService.sendSecurityCode(emailSecurityCode);
 		return isSent;

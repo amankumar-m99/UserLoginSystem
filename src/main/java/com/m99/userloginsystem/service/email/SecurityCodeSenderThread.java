@@ -1,7 +1,5 @@
 package com.m99.userloginsystem.service.email;
 
-import org.apache.commons.mail.EmailException;
-
 import com.m99.userloginsystem.entity.security.EmailSecurityCode;
 import com.m99.userloginsystem.mail.templates.SecurityCodeTemplate;
 
@@ -22,7 +20,7 @@ public class SecurityCodeSenderThread extends Thread{
 		try {
 			//sendMail() returns boolean
 			emailSenderDriver.sendMail(emailSecurityCode.getEmail(), "Security Code From M99", content, EmailContentType.SIMPLE_TEXT);
-		} catch (EmailException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
