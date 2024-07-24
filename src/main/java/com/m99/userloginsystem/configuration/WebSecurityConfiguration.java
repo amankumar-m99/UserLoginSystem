@@ -46,8 +46,6 @@ public class WebSecurityConfiguration {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	/*
-	 * old code
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf(csrf -> csrf.disable())
@@ -67,44 +65,43 @@ public class WebSecurityConfiguration {
 		httpSecurity.cors(); // to accept cross origin auth requests
         return httpSecurity.build();
     }
-	*/
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf(AbstractHttpConfigurer::disable)
-	      .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-	              authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
+//	@Bean
+//	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//		httpSecurity.csrf(AbstractHttpConfigurer::disable)
+//	      .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+//	              authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
 //	              sample URLs
 //	                      .requestMatchers("/admin/**").hasAnyRole("ADMIN")
 //	                      .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 //	                      .requestMatchers("/login/**").permitAll()
-	                      .requestMatchers("/images/**").permitAll()
-	                      .requestMatchers("/jwt/login").permitAll()
-	                      .requestMatchers("/jwt/activate").permitAll()
-	                      .requestMatchers("/register/**").permitAll()
-	                      .requestMatchers("/password-update/user").permitAll()
-	                      .requestMatchers("/enable").permitAll()
-	                      .requestMatchers("/email/**").permitAll()
-	                      .anyRequest().authenticated())
-	      .httpBasic(Customizer.withDefaults())
-	      .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-	      .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-		httpSecurity.cors(corsConfigurer->{
-			corsConfigurer.configurationSource(getCorsConfigurationSource());
-		});
-	    return httpSecurity.build();
-	}
+//	                      .requestMatchers("/images/**").permitAll()
+//	                      .requestMatchers("/jwt/login").permitAll()
+//	                      .requestMatchers("/jwt/activate").permitAll()
+//	                      .requestMatchers("/register/**").permitAll()
+//	                      .requestMatchers("/password-update/user").permitAll()
+//	                      .requestMatchers("/enable").permitAll()
+//	                      .requestMatchers("/email/**").permitAll()
+//	                      .anyRequest().authenticated())
+//	      .httpBasic(Customizer.withDefaults())
+//	      .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+//	      .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//		httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//		httpSecurity.cors(corsConfigurer->{
+//			corsConfigurer.configurationSource(getCorsConfigurationSource());
+//		});
+//	    return httpSecurity.build();
+//	}
 
 //	@Bean
-	CorsConfigurationSource getCorsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
+//	CorsConfigurationSource getCorsConfigurationSource() {
+//		CorsConfiguration configuration = new CorsConfiguration();
 //		configuration.setAllowedOrigins(Arrays.asList("*"));
-		configuration.setAllowedMethods(Arrays.asList("*"));
-	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	    source.registerCorsConfiguration("/**", configuration);
-	    return source;
-	}
+//		configuration.setAllowedMethods(Arrays.asList("*"));
+//	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//	    source.registerCorsConfiguration("/**", configuration);
+//	    return source;
+//	}
 
 	@Bean
 	//used in code with durgesh

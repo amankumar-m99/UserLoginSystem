@@ -44,9 +44,7 @@ public class JwtHelper {
 
     //for retrieving any information from token we will need the secret key
     private Claims getAllClaimsFromToken(String token) {
-//        return Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(token).getBody();
-        SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-        return (Claims) Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
+        return Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(token).getBody();
     }
 
     //check if the token has expired
@@ -72,8 +70,7 @@ public class JwtHelper {
         		.setSubject(subject)
         		.setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-//                .signWith(SignatureAlgorithm.HS512, secret).compact();
-                .signWith(getSigningKey(), SignatureAlgorithm.HS512).compact();
+                .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     private Key getSigningKey() {
