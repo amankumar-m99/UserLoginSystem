@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.m99.userloginsystem.entity.security.SecurityCode;
 import com.m99.userloginsystem.model.SecurityCodePurpose;
 import com.m99.userloginsystem.model.email.EmailFormModel;
-import com.m99.userloginsystem.model.security.SecurityCodeFormModel;
+import com.m99.userloginsystem.model.user.EmailVerificationFormModel;
 import com.m99.userloginsystem.service.email.EmailSenderService;
 import com.m99.userloginsystem.service.security.SecurityCodeService;
 
@@ -27,13 +27,13 @@ public class EmailVerificationController {
 
 	@PostMapping("/security-code")
 	public void generateSecurityCodeForEmail(@RequestBody EmailFormModel emailFormModel) {
-		SecurityCode emailSecurityCode = securityCodeService.generateSecurityCodeForEmail(emailFormModel.getEmail(), SecurityCodePurpose.REGISTRATION);
+		SecurityCode emailSecurityCode = securityCodeService.generateSecurityCodeForEmail(emailFormModel.getEmail(), SecurityCodePurpose.VERIFICATON);
 		emailSenderService.sendSecurityCode(emailSecurityCode);
 	}
 
 	@PostMapping("/verify-email")
-	public boolean verifyEmailByCode(@RequestBody SecurityCodeFormModel securityCodeFormModel) {
-		boolean isVerified = securityCodeService.verifySecurityCode(securityCodeFormModel);
+	public boolean verifyEmailBySecurityCode(@RequestBody EmailVerificationFormModel model) {
+		boolean isVerified = securityCodeService.verifySecurityCode(model, SecurityCodePurpose.VERIFICATON);
 		return isVerified;
 	}
 }

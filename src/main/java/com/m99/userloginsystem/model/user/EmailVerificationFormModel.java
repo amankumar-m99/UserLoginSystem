@@ -11,8 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdatePasswordFormModel implements ISecurityCodeModel{
+public class EmailVerificationFormModel implements ISecurityCodeModel{
 	private String email;
-	private String newPassword;
 	private String securityCode;
 }

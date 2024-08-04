@@ -34,7 +34,6 @@ import com.m99.userloginsystem.entity.user.UserPersonalDetails;
 import com.m99.userloginsystem.entity.user.UserSecurityDetails;
 import com.m99.userloginsystem.entity.user.profilepic.UserProfilePicResource;
 import com.m99.userloginsystem.initializer.StarterDataInitializer;
-import com.m99.userloginsystem.model.user.UpdatePasswordFormModel;
 import com.m99.userloginsystem.model.user.registration.UserRegistrationFormModel;
 
 @Service
@@ -93,15 +92,6 @@ public class UserService {
 		}
 		User user = createUserFromUserForm(userForm);
 		return userDao.save(user);
-	}
-
-	public boolean updatePassword(UpdatePasswordFormModel model) {
-		User user = getUserByUsernameOrEmail(model.getUsername());
-		if(user == null) {
-			return false;
-		}
-		String securityCode = model.getSecurityCode();
-		return false;
 	}
 
 	public String saveUserProfilePic(long id, MultipartFile multipartFile) {
@@ -251,5 +241,12 @@ public class UserService {
 		userDao.save(createUserFromUserForm(StarterDataInitializer.getSuperAdmin()));
 		userDao.save(createUserFromUserForm(StarterDataInitializer.getAdmin()));
 		userDao.save(createUserFromUserForm(StarterDataInitializer.getStandardUser()));
+	}
+
+	public boolean updatePassword(String email, String newPassword) {
+		User user = getUserByUsernameOrEmail(email);
+		user.setPassword(passwordEncoder.encode(newPassword));
+		userDao.save(user);
+		return true;
 	}
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.m99.userloginsystem.model.jwt.JwtRequest;
 import com.m99.userloginsystem.model.jwt.JwtResponse;
-import com.m99.userloginsystem.model.security.SecurityCodeFormModel;
 import com.m99.userloginsystem.service.jwt.JwtService;
 import com.m99.userloginsystem.service.security.SecurityCodeService;
 
@@ -31,11 +30,5 @@ public class JwtController {
 	@PostMapping({"/login"})
 	public JwtResponse createJwtToken(@RequestBody JwtRequest jwtRequest) throws Exception {
 		return userDetailsService.createJwtToken(jwtRequest, authenticationManager);
-	}
-
-	@PostMapping({"/activate"})
-	public String activateUser(@RequestBody SecurityCodeFormModel securityCodeFormModel) {
-		String email = securityCodeService.activateUserBySecurityCode(securityCodeFormModel);
-		return email;
 	}
 }

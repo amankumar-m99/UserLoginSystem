@@ -1,7 +1,7 @@
 package com.m99.userloginsystem.model;
 
 public enum SecurityCodePurpose {
-	REGISTRATION,
+	VERIFICATON,
 	LOGIN,
 	UPDATE_PASSWORD,
 	TRANSACTION,

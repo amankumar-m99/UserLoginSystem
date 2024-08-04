@@ -22,8 +22,12 @@ public class PasswordUpdateService {
 	@Autowired
 	private SecurityCodeService securityCodeService;
 
-	public boolean updatePassword(UpdatePasswordFormModel updatePasswordFormModel) {
-		return userService.updatePassword(updatePasswordFormModel);
+	public boolean updatePassword(UpdatePasswordFormModel model) {
+		boolean isSecurityCodeVerified = securityCodeService.verifySecurityCode(model, SecurityCodePurpose.UPDATE_PASSWORD);
+		if(!isSecurityCodeVerified) {
+			return false;
+		}
+		return userService.updatePassword(model.getEmail(), model.getNewPassword());
 	}
 
 	public boolean sendSecurityCodeForPasswordUpdate(String emailOrUsername) {
