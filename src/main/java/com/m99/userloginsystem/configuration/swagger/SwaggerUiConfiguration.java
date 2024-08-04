@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.configuration;
+package com.m99.userloginsystem.configuration.swagger;
 
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;

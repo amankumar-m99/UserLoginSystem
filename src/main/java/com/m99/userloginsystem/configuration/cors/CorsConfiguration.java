@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.configuration;
+package com.m99.userloginsystem.configuration.cors;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
