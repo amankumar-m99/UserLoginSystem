@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.security;
+package com.m99.userloginsystem.security.jwt;
 
 import java.io.IOException;
 

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.m99.userloginsystem.entity.security.SecurityCode;
 import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.model.SecurityCodePurpose;
-import com.m99.userloginsystem.model.user.UpdatePasswordModel;
+import com.m99.userloginsystem.model.user.UpdatePasswordFormModel;
 import com.m99.userloginsystem.service.email.EmailSenderService;
 import com.m99.userloginsystem.service.security.SecurityCodeService;
 
@@ -22,8 +22,8 @@ public class PasswordUpdateService {
 	@Autowired
 	private SecurityCodeService securityCodeService;
 
-	public boolean updatePassword(UpdatePasswordModel updatePasswordModel) {
-		return userService.updatePassword(updatePasswordModel);
+	public boolean updatePassword(UpdatePasswordFormModel updatePasswordFormModel) {
+		return userService.updatePassword(updatePasswordFormModel);
 	}
 
 	public boolean sendSecurityCodeForPasswordUpdate(String emailOrUsername) {

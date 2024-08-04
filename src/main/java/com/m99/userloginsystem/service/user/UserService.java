@@ -34,7 +34,7 @@ import com.m99.userloginsystem.entity.user.UserPersonalDetails;
 import com.m99.userloginsystem.entity.user.UserSecurityDetails;
 import com.m99.userloginsystem.entity.user.profilepic.UserProfilePicResource;
 import com.m99.userloginsystem.initializer.StarterDataInitializer;
-import com.m99.userloginsystem.model.user.UpdatePasswordModel;
+import com.m99.userloginsystem.model.user.UpdatePasswordFormModel;
 import com.m99.userloginsystem.model.user.registration.UserRegistrationFormModel;
 
 @Service
@@ -95,7 +95,7 @@ public class UserService {
 		return userDao.save(user);
 	}
 
-	public boolean updatePassword(UpdatePasswordModel model) {
+	public boolean updatePassword(UpdatePasswordFormModel model) {
 		User user = getUserByUsernameOrEmail(model.getUsername());
 		if(user == null) {
 			return false;

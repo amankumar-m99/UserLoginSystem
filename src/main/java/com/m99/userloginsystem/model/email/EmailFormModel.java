@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class EmailForm {
+public class EmailFormModel {
 	private String email;
 }

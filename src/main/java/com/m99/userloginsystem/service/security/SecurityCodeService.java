@@ -10,7 +10,7 @@ import com.m99.userloginsystem.customexception.email.EmailNotFoundException;
 import com.m99.userloginsystem.dao.security.SecurityCodeDao;
 import com.m99.userloginsystem.entity.security.SecurityCode;
 import com.m99.userloginsystem.model.SecurityCodePurpose;
-import com.m99.userloginsystem.model.security.SecurityCodeForm;
+import com.m99.userloginsystem.model.security.SecurityCodeFormModel;
 import com.m99.userloginsystem.utils.OtpGenerator;
 
 @Service
@@ -19,8 +19,8 @@ public class SecurityCodeService {
 	@Autowired
 	private SecurityCodeDao securityCodeDao;
 
-	public String activateUserBySecurityCode(SecurityCodeForm securityCodeForm) {
-		SecurityCode securityCode = securityCodeDao.findByEmail(securityCodeForm.getEmail()).orElse(null);
+	public String activateUserBySecurityCode(SecurityCodeFormModel securityCodeFormModel) {
+		SecurityCode securityCode = securityCodeDao.findByEmail(securityCodeFormModel.getEmail()).orElse(null);
 		if(securityCode == null)
 			throw new NoSuchElementException("Invalid email");
 		securityCode.setIsExpired(true);
@@ -40,9 +40,9 @@ public class SecurityCodeService {
 		return securityCodeDao.save(securityCode);
 	}
 
-	public boolean verifySecurityCode(SecurityCodeForm securityCodeForm) {
-		String email = securityCodeForm.getEmail();
-		int securityCode = securityCodeForm.getSecurityCode();
+	public boolean verifySecurityCode(SecurityCodeFormModel securityCodeFormModel) {
+		String email = securityCodeFormModel.getEmail();
+		int securityCode = securityCodeFormModel.getSecurityCode();
 		SecurityCode emailSecurityCode = securityCodeDao.findByEmail(email).orElseThrow(()->new EmailNotFoundException("No email as "+email));
 		if(emailSecurityCode.getSecurityCode() != securityCode)
 			return false;

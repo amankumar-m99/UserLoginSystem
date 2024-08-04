@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.exceptionhandler;
+package com.m99.userloginsystem.customexceptionhandler;
 
 import java.util.NoSuchElementException;
 

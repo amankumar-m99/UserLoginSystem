@@ -15,8 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.m99.userloginsystem.configuration.swagger.SwaggerUiConfiguration;
-import com.m99.userloginsystem.security.JwtAuthenticationEntryPoint;
-import com.m99.userloginsystem.security.JwtAuthenticationFilter;
+import com.m99.userloginsystem.security.jwt.JwtAuthenticationEntryPoint;
+import com.m99.userloginsystem.security.jwt.JwtAuthenticationFilter;
 import com.m99.userloginsystem.service.jwt.JwtService;
 
 @Configuration

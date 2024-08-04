@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SecurityCodeForm {
+public class SecurityCodeFormModel {
 	private String email;
 	private int securityCode;
 	private SecurityCodePurpose purpose;

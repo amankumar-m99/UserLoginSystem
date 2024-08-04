@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.security;
+package com.m99.userloginsystem.security.jwt;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;

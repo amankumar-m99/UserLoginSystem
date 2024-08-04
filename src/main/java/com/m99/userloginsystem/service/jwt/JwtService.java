@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.model.jwt.JwtRequest;
 import com.m99.userloginsystem.model.jwt.JwtResponse;
-import com.m99.userloginsystem.security.JwtHelper;
+import com.m99.userloginsystem.security.jwt.JwtHelper;
 import com.m99.userloginsystem.service.user.UserService;
 
 @Service

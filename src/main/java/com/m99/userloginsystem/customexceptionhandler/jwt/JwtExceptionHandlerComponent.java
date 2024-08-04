@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.exceptionhandler.jwt;
+package com.m99.userloginsystem.customexceptionhandler.jwt;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
