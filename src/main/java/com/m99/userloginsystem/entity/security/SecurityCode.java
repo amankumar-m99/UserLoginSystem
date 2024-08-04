@@ -22,7 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @Entity
-public class EmailSecurityCode {
+public class SecurityCode {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;

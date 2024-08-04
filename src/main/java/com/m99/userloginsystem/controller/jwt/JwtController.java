@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.m99.userloginsystem.model.EmailSecurityCodeForm;
 import com.m99.userloginsystem.model.jwt.JwtRequest;
 import com.m99.userloginsystem.model.jwt.JwtResponse;
-import com.m99.userloginsystem.service.email.EmailVerificationService;
+import com.m99.userloginsystem.model.security.SecurityCodeForm;
 import com.m99.userloginsystem.service.jwt.JwtService;
+import com.m99.userloginsystem.service.security.SecurityCodeService;
 
 @RestController
 @CrossOrigin
@@ -23,7 +23,7 @@ public class JwtController {
 	private JwtService userDetailsService;
 
 	@Autowired
-	private EmailVerificationService emailVerificationService;
+	private SecurityCodeService securityCodeService;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -34,8 +34,8 @@ public class JwtController {
 	}
 
 	@PostMapping({"/activate"})
-	public String activateUser(@RequestBody EmailSecurityCodeForm emailSecurityCodeForm) {
-		String email = emailVerificationService.activateUserBySecurityCode(emailSecurityCodeForm);
+	public String activateUser(@RequestBody SecurityCodeForm securityCodeForm) {
+		String email = securityCodeService.activateUserBySecurityCode(securityCodeForm);
 		return email;
 	}
 }

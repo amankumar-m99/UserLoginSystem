@@ -1,16 +1,16 @@
 package com.m99.userloginsystem.mail.templates;
 
-import com.m99.userloginsystem.entity.security.EmailSecurityCode;
+import com.m99.userloginsystem.entity.security.SecurityCode;
 
 public class SecurityCodeTemplate implements HtmlMailTemplate {
 	private int securityCode;
 	private String recipientEmail;
 	private String purpose;
 
-	public SecurityCodeTemplate(EmailSecurityCode emailSecurityCode) {
-		this.securityCode = emailSecurityCode.getSecurityCode();
-		this.recipientEmail = emailSecurityCode.getEmail();
-		this.purpose = emailSecurityCode.getPurpose().toString().toLowerCase().replace("_", " ");
+	public SecurityCodeTemplate(SecurityCode securityCode) {
+		this.securityCode = securityCode.getSecurityCode();
+		this.recipientEmail = securityCode.getEmail();
+		this.purpose = securityCode.getPurpose().toString().toLowerCase().replace("_", " ");
 	}
 
 	@Override

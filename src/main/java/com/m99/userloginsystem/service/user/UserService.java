@@ -22,25 +22,26 @@ import com.m99.userloginsystem.customexception.images.ImageResourceNotFoundExcep
 import com.m99.userloginsystem.customexception.user.UserNameNotAvailableException;
 import com.m99.userloginsystem.dao.profilepic.ProfilePicDao;
 import com.m99.userloginsystem.dao.role.RoleDao;
-import com.m99.userloginsystem.dao.security.EmailSecurityCodeDao;
+import com.m99.userloginsystem.dao.security.SecurityCodeDao;
 import com.m99.userloginsystem.dao.user.UserDao;
 import com.m99.userloginsystem.dao.user.UserPersonalDetailsDao;
 import com.m99.userloginsystem.dao.user.UserSecurityDetailsDao;
 import com.m99.userloginsystem.entity.profilepic.ProfilePic;
 import com.m99.userloginsystem.entity.role.Role;
-import com.m99.userloginsystem.entity.security.EmailSecurityCode;
+import com.m99.userloginsystem.entity.security.SecurityCode;
 import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.entity.user.UserPersonalDetails;
 import com.m99.userloginsystem.entity.user.UserSecurityDetails;
 import com.m99.userloginsystem.entity.user.profilepic.UserProfilePicResource;
 import com.m99.userloginsystem.initializer.StarterDataInitializer;
+import com.m99.userloginsystem.model.user.UpdatePasswordModel;
 import com.m99.userloginsystem.model.user.registration.UserRegistrationFormModel;
 
 @Service
 public class UserService {
 
 	@Autowired
-	private EmailSecurityCodeDao emailSecurityCodeDao;
+	private SecurityCodeDao securityCodeDao;
 
 	@Autowired
 	private ProfilePicDao profilePicDao;
@@ -79,7 +80,7 @@ public class UserService {
 		if(!isUserAvailable(email, UserLookupType.EMAIL)) {
 			throw new EmailAlreadyExistsException("email already exists!");
 		}
-		EmailSecurityCode emailSecurityCode = emailSecurityCodeDao.findByEmail(email).orElse(null);
+		SecurityCode emailSecurityCode = securityCodeDao.findByEmail(email).orElse(null);
 		if(emailSecurityCode != null) {
 			if(!emailSecurityCode.getIsUsed())
 				throw new EmailNotVerifiedException("email "+email+" is not verified.");
@@ -92,6 +93,15 @@ public class UserService {
 		}
 		User user = createUserFromUserForm(userForm);
 		return userDao.save(user);
+	}
+
+	public boolean updatePassword(UpdatePasswordModel model) {
+		User user = getUserByUsernameOrEmail(model.getUsername());
+		if(user == null) {
+			return false;
+		}
+		String securityCode = model.getSecurityCode();
+		return false;
 	}
 
 	public String saveUserProfilePic(long id, MultipartFile multipartFile) {
