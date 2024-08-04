@@ -1,4 +1,4 @@
-package com.m99.userloginsystem.configuration;
+package com.m99.userloginsystem.configuration.data;
 
 public enum ApplicationDataDirectoryPolicy {
 	CREATE,

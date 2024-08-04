@@ -2,7 +2,6 @@ package com.m99.userloginsystem.configuration.data;
 
 import java.io.File;
 
-import com.m99.userloginsystem.configuration.ApplicationDataDirectoryPolicy;
 import com.m99.userloginsystem.utils.DirectoryUtils;
 
 public class StaticData {
