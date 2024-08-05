@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import com.m99.userloginsystem.customexception.email.EmailNotFoundException;
 import com.m99.userloginsystem.dao.security.SecurityCodeDao;
 import com.m99.userloginsystem.entity.security.SecurityCode;
+import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.model.SecurityCodePurpose;
 import com.m99.userloginsystem.model.security.ISecurityCodeModel;
 import com.m99.userloginsystem.model.security.SecurityCodeModel;
+import com.m99.userloginsystem.service.user.UserService;
 import com.m99.userloginsystem.utils.OtpGenerator;
 import com.m99.userloginsystem.utils.SecurityCodeUtils;
 
@@ -19,6 +21,9 @@ public class SecurityCodeService {
 
 	@Autowired
 	private SecurityCodeDao securityCodeDao;
+
+	@Autowired
+	private UserService userService;
 
 	public SecurityCode generateSecurityCodeForEmail(String email, SecurityCodePurpose securityCodePurpose) {
 		SecurityCode securityCode = SecurityCode.builder()
@@ -35,8 +40,16 @@ public class SecurityCodeService {
 	public boolean verifySecurityCode(ISecurityCodeModel model, SecurityCodePurpose purpose) {
 		SecurityCodeModel securityCodeModel = SecurityCodeUtils.getSecurityCodeModelFromInput(model, purpose);
 		String email = securityCodeModel.getEmail();
+		if(!purpose.equals(SecurityCodePurpose.VERIFICATON)) {
+			User user = userService.getUserByUsernameOrEmail(email);
+			if(user != null) {
+				email = user.getEmail();
+			}
+		}
 		int providedSecurityCode = securityCodeModel.getSecurityCode();
-		SecurityCode securityCode = securityCodeDao.findByEmail(email).orElseThrow(()->new EmailNotFoundException("No email as "+email));
+		final String finalEmail = email;
+		SecurityCode securityCode = securityCodeDao.findByEmailAndSecurityCode(email, providedSecurityCode)
+				.orElseThrow(()->new EmailNotFoundException("No email as "+ finalEmail));
 		if(securityCode == null) {
 			return false;
 		}
@@ -44,6 +57,7 @@ public class SecurityCodeService {
 			return false;
 		}
 		if(securityCode.getSecurityCode() != providedSecurityCode) {
+			
 			return false;
 		}
 		if(!securityCode.getPurpose().equals(securityCodeModel.getPurpose())) {
