@@ -44,7 +44,7 @@ public class WebSecurityConfiguration {
 		httpSecurity.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests()
                 .requestMatchers(SwaggerUiConfiguration.getSwaggerUrls()).permitAll()
-                .requestMatchers("/images/**").permitAll()
+                .requestMatchers("/image/**").permitAll()
                 .requestMatchers("/jwt/login").permitAll()
                 .requestMatchers("/jwt/activate").permitAll()
                 .requestMatchers("/register/**").permitAll()
