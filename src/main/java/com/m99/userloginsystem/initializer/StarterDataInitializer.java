@@ -27,19 +27,10 @@ public class StarterDataInitializer {
 				.country("")
 				.dateOfBirth(new Date())
 				.build();
-		UserSecurityDetails securityDetails = UserSecurityDetails.builder()
-				.recoveryEmail("")
-				.recoveryPhoneNumber("")
-				.securityQuestion("")
-				.securityAnswer("")
-				.loginAlert(true)
-				.passwordUpdateAlert(true)
-				.twoStepLogin(false)
-				.build();
 		UserRegistrationFormModel registrationFormModel = UserRegistrationFormModel.builder()
 				.accountDetails(accountDetails)
 				.personalDetails(personalDetails)
-				.securityDetails(securityDetails)
+				.securityDetails(getSampleUserSecurityDetails())
 				.build();
 		return registrationFormModel;
 	}
@@ -60,19 +51,10 @@ public class StarterDataInitializer {
 				.country("")
 				.dateOfBirth(new Date())
 				.build();
-		UserSecurityDetails securityDetails = UserSecurityDetails.builder()
-				.recoveryEmail("")
-				.recoveryPhoneNumber("")
-				.securityQuestion("")
-				.securityAnswer("")
-				.loginAlert(true)
-				.passwordUpdateAlert(true)
-				.twoStepLogin(false)
-				.build();
 		UserRegistrationFormModel registrationFormModel = UserRegistrationFormModel.builder()
 				.accountDetails(accountDetails)
 				.personalDetails(personalDetails)
-				.securityDetails(securityDetails)
+				.securityDetails(getSampleUserSecurityDetails())
 				.build();
 		return registrationFormModel;
 	}
@@ -93,6 +75,15 @@ public class StarterDataInitializer {
 				.country("")
 				.dateOfBirth(new Date())
 				.build();
+		UserRegistrationFormModel registrationFormModel = UserRegistrationFormModel.builder()
+				.accountDetails(accountDetails)
+				.personalDetails(personalDetails)
+				.securityDetails(getSampleUserSecurityDetails())
+				.build();
+		return registrationFormModel;
+	}
+
+	public static UserSecurityDetails getSampleUserSecurityDetails() {
 		UserSecurityDetails securityDetails = UserSecurityDetails.builder()
 				.recoveryEmail("")
 				.recoveryPhoneNumber("")
@@ -102,11 +93,6 @@ public class StarterDataInitializer {
 				.passwordUpdateAlert(true)
 				.twoStepLogin(false)
 				.build();
-		UserRegistrationFormModel registrationFormModel = UserRegistrationFormModel.builder()
-				.accountDetails(accountDetails)
-				.personalDetails(personalDetails)
-				.securityDetails(securityDetails)
-				.build();
-		return registrationFormModel;
+		return securityDetails;
 	}
 }

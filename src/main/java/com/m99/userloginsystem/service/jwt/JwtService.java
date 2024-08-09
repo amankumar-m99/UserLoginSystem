@@ -14,6 +14,7 @@ import com.m99.userloginsystem.entity.user.User;
 import com.m99.userloginsystem.model.jwt.JwtRequest;
 import com.m99.userloginsystem.model.jwt.JwtResponse;
 import com.m99.userloginsystem.security.jwt.JwtHelper;
+import com.m99.userloginsystem.service.email.EmailSenderService;
 import com.m99.userloginsystem.service.user.UserService;
 
 @Service
@@ -23,6 +24,9 @@ public class JwtService implements UserDetailsService{
 	private UserService userService;
 
 	@Autowired
+	private EmailSenderService emailSenderService;
+
+	@Autowired
 	private JwtHelper jwtHelper;
 
 	public JwtResponse createJwtToken(JwtRequest jwtRequest, AuthenticationManager authenticationManager) throws Exception {
@@ -30,8 +34,15 @@ public class JwtService implements UserDetailsService{
 		String password = jwtRequest.getPassword();
 		User user = (User) loadUserByUsername(username);
 		authenticate(username, password, authenticationManager);
+		if(user.getSecurityDetails().getLoginAlert()) {
+			sendLoginAlert(user.getEmail());
+		}
 		String generateToken = jwtHelper.generateToken(user);
 		return new JwtResponse(user.getId(), user.getEmail(), generateToken);
+	}
+
+	private void sendLoginAlert(String email) {
+		emailSenderService.sendLoginAlert(email);
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package com.m99.userloginsystem.mail.templates;
 
 import com.m99.userloginsystem.entity.security.SecurityCode;
 
-public class SecurityCodeTemplate implements HtmlMailTemplate {
+public class SecurityCodeTemplate implements MailTemplate {
 	private int securityCode;
 	private String recipientEmail;
 	private String purpose;
@@ -14,7 +14,7 @@ public class SecurityCodeTemplate implements HtmlMailTemplate {
 	}
 
 	@Override
-	public String getHtmlContent() {
+	public String getHtmlTemplate() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("<p>Hi <strong><a href=\"mailto:%s\">%s</a></strong></p>", recipientEmail, recipientEmail));
 		sb.append("<p>We received your request for " +purpose+ ".</p>");
@@ -24,7 +24,7 @@ public class SecurityCodeTemplate implements HtmlMailTemplate {
 		return sb.toString();
 	}
 
-	public String getTextContent() {
+	public String getPlainTextTemplate() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("Hi %s,", recipientEmail));
 		sb.append(System.lineSeparator());

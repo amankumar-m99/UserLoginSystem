@@ -34,7 +34,10 @@ import com.m99.userloginsystem.entity.user.UserPersonalDetails;
 import com.m99.userloginsystem.entity.user.UserSecurityDetails;
 import com.m99.userloginsystem.entity.user.profilepic.UserProfilePicResource;
 import com.m99.userloginsystem.initializer.StarterDataInitializer;
+import com.m99.userloginsystem.model.user.UserPersonalDetailsModel;
+import com.m99.userloginsystem.model.user.UserSecurityDetailsModel;
 import com.m99.userloginsystem.model.user.registration.UserRegistrationFormModel;
+import com.m99.userloginsystem.service.email.EmailSenderService;
 
 @Service
 public class UserService {
@@ -59,6 +62,9 @@ public class UserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private EmailSenderService emailSenderService;
 
 	public List<User> getAllUsers(){
 		return userDao.findAll();
@@ -161,7 +167,8 @@ public class UserService {
 
 	private User createUserFromUserForm(UserRegistrationFormModel userForm) {
 		UserPersonalDetails personalDetails = userPersonalDetailsDao.save(userForm.getPersonalDetails()); 
-		UserSecurityDetails securityDetails = userSecurityDetailsDao.save(userForm.getSecurityDetails());
+//		UserSecurityDetails securityDetails = userSecurityDetailsDao.save(userForm.getSecurityDetails());
+		UserSecurityDetails securityDetails = userSecurityDetailsDao.save(StarterDataInitializer.getSampleUserSecurityDetails());
 		User user = User.builder()
 				.username(userForm.getAccountDetails().getUsername())
 				.email(userForm.getAccountDetails().getEmail())
@@ -247,6 +254,31 @@ public class UserService {
 		User user = getUserByUsernameOrEmail(email);
 		user.setPassword(passwordEncoder.encode(newPassword));
 		userDao.save(user);
+		if(user.getSecurityDetails().getPasswordUpdateAlert()) {
+			sendUpdatePasswordAlert(user.getEmail());
+		}
 		return true;
+	}
+
+	public void sendUpdatePasswordAlert(String email) {
+		emailSenderService.sendPasswordUpdateAlert(email);
+	}
+
+	public UserPersonalDetails updateUserPersonalDetails(UserPersonalDetailsModel model) {
+		UserPersonalDetails userPersonalDetails = userPersonalDetailsDao.findById(model.getId()).orElse(null);
+		if(userPersonalDetails != null) {
+			UserPersonalDetailsService.updateDetails(userPersonalDetails, model);
+			return userPersonalDetailsDao.save(userPersonalDetails);
+		}
+		return null;
+	}
+
+	public UserSecurityDetails updateUserSecurityDetails(UserSecurityDetailsModel model) {
+		UserSecurityDetails userSecurityDetails = userSecurityDetailsDao.findById(model.getId()).orElse(null);
+		if(userSecurityDetails != null) {
+			UserSecurityDetailsService.updateDetails(userSecurityDetails, model);
+			return userSecurityDetailsDao.save(userSecurityDetails);
+		}
+		return null;
 	}
 }

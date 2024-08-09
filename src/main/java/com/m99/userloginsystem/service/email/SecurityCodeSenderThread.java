@@ -16,7 +16,7 @@ public class SecurityCodeSenderThread extends Thread{
 	@Override
 	public void run() {
 		SecurityCodeTemplate template = new SecurityCodeTemplate(securityCode);
-		String content = template.getTextContent();
+		String content = template.getPlainTextTemplate();
 		try {
 			//sendMail() returns boolean
 			emailSenderDriver.sendMail(securityCode.getEmail(), "Security Code From M99", content, EmailContentType.SIMPLE_TEXT);

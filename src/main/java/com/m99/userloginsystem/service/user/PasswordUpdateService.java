@@ -27,7 +27,8 @@ public class PasswordUpdateService {
 		if(!isSecurityCodeVerified) {
 			return false;
 		}
-		return userService.updatePassword(model.getEmail(), model.getNewPassword());
+		boolean isPasswordUpdated = userService.updatePassword(model.getEmail(), model.getNewPassword());
+		return isPasswordUpdated;
 	}
 
 	public boolean sendSecurityCodeForPasswordUpdate(String emailOrUsername) {

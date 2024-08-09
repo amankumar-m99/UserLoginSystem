@@ -12,13 +12,18 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.m99.userloginsystem.entity.user.User;
+import com.m99.userloginsystem.entity.user.UserPersonalDetails;
+import com.m99.userloginsystem.entity.user.UserSecurityDetails;
 import com.m99.userloginsystem.model.user.ProfilePicResponse;
+import com.m99.userloginsystem.model.user.UserPersonalDetailsModel;
+import com.m99.userloginsystem.model.user.UserSecurityDetailsModel;
 import com.m99.userloginsystem.service.user.UserService;
 import com.m99.userloginsystem.utils.ConsolePrinter;
 import com.m99.userloginsystem.utils.UserExracter;
@@ -84,5 +89,17 @@ public class UserController {
 		}catch (Exception e) {
 			throw new NoSuchElementException("No user with id "+ userIdStr);
 		}
+	}
+
+	@PostMapping({"/update-personal-details"})
+	@CrossOrigin
+	public UserPersonalDetails updateUserPersonalDetails(@RequestBody UserPersonalDetailsModel model) {
+		return userService.updateUserPersonalDetails(model);
+	}
+
+	@PostMapping({"/update-security-details"})
+	@CrossOrigin
+	public UserSecurityDetails updateUserSecurityDetails(@RequestBody UserSecurityDetailsModel model) {
+		return userService.updateUserSecurityDetails(model);
 	}
 }

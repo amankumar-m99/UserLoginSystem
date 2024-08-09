@@ -20,4 +20,24 @@ public class EmailSenderService {
 		thread.start();
 		return true;	
 	}
+
+	public boolean sendLoginAlert(String email) {
+		return sendLoginAlertOnAThread(email);
+	}
+
+	private boolean sendLoginAlertOnAThread(String email) {
+		Thread thread = new LoginAlertSenderThread(emailSenderDriver, email);
+		thread.start();
+		return true;
+	}
+
+	public boolean sendPasswordUpdateAlert(String email) {
+		return sendPasswordUpdateAlertOnAThread(email);
+	}
+
+	private boolean sendPasswordUpdateAlertOnAThread(String email) {
+		Thread thread = new PasswordUpdateAlertSenderThread(emailSenderDriver, email);
+		thread.start();
+		return true;
+	}
 }
